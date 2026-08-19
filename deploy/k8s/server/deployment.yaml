@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medibrain-server
+  namespace: medibrain
+  labels:
+    app: medibrain-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: medibrain-server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: medibrain-server
+    spec:
+      containers:
+        - name: server
+          image: localhost:5000/medibrain-server:v1.2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: medibrain-config
+            - secretRef:
+                name: medibrain-secret
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: medibrain-secret
+                  key: MONGO_URI
+            - name: REDIS_HOST
+              value: medibrain-redis
+            - name: NEO4J_URI
+              value: bolt://medibrain-neo4j:7687
+            - name: NEO4J_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medibrain-secret
+                  key: NEO4J_PASSWORD
+            - name: PORT
+              value: '3000'
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: '1'
+              memory: 1Gi
+      terminationGracePeriodSeconds: 30

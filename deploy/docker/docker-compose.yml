@@ -1,0 +1,87 @@
+version: '3.8'
+
+# ============================================================
+# MediBrain-Hospital 基础设施编排（开发/单机）
+# 启动：docker compose -f deploy/docker/docker-compose.yml up -d
+# 生产升级：将本文件交给 docker swarm 即可横向扩展（见 deploy/k8s）
+# ============================================================
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: medibrain-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--quiet', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: medibrain-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: medibrain-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: 'neo4j/${NEO4J_PASSWORD:-medibrain-secret}'
+    ports:
+      - '7475:7474' # HTTP
+      - '7688:7687' # Bolt
+    volumes:
+      - neo4j-data:/data
+    healthcheck:
+      test: ['CMD-SHELL', 'wget -qO- http://localhost:7474 || exit 1']
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  milvus:
+    image: milvusdb/milvus:v2.5.4
+    container_name: medibrain-milvus
+    restart: unless-stopped
+    # standalone 模式：嵌入 etcd，存储使用 compose 内的 minio
+    command: ['milvus', 'run', 'standalone']
+    environment:
+      ETCD_USE_EMBED: 'true'
+      MINIO_ADDRESS: minio
+      MINIO_PORT: '9000'
+      MINIO_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY:-medibrain}
+      MINIO_SECRET_ACCESS_KEY: ${MINIO_SECRET_KEY:-medibrain-secret}
+      MINIO_USE_SSL: 'false'
+    ports:
+      - '19540:19530'
+    volumes:
+      - milvus-data:/var/lib/milvus
+
+  minio:
+    image: minio/minio:latest
+    container_name: medibrain-minio
+    restart: unless-stopped
+    command: server /data --console-address ':9001'
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-medibrain}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-medibrain-secret}
+    ports:
+      - '9100:9000' # API
+      - '9101:9001' # Console
+    volumes:
+      - minio-data:/data
+
+volumes:
+  mongo-data:
+  redis-data:
+  neo4j-data:
+  milvus-data:
+  minio-data:

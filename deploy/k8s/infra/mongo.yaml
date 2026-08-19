@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: medibrain-mongo
+  namespace: medibrain
+  labels:
+    app: medibrain-mongo
+spec:
+  serviceName: medibrain-mongo
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medibrain-mongo
+  template:
+    metadata:
+      labels:
+        app: medibrain-mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:7
+          args: ['--auth']
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: '2'
+              memory: 2Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        resources:
+          requests:
+            storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medibrain-mongo
+  namespace: medibrain
+  labels:
+    app: medibrain-mongo
+spec:
+  clusterIP: None
+  selector:
+    app: medibrain-mongo
+  ports:
+    - port: 27017
+      targetPort: 27017
