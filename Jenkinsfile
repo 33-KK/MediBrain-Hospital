@@ -61,10 +61,14 @@ pipeline {
           '''
         }
         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-          sh "kubectl -n medibrain set image deployment/medibrain-server server=${REGISTRY}/medibrain-server:${IMAGE_TAG}"
-          sh "kubectl -n medibrain set image deployment/medibrain-web web=${REGISTRY}/medibrain-web:${IMAGE_TAG}"
-          sh 'kubectl -n medibrain rollout status deployment/medibrain-server --timeout=300s'
-          sh 'kubectl -n medibrain rollout status deployment/medibrain-web --timeout=300s'
+          sh '''
+            # kind 本地环境：kubeconfig 指向 127.0.0.1，需改为宿主机可达地址
+            sed -i 's|https://127.0.0.1:[0-9]*|https://host.docker.internal:63061|' ${KUBECONFIG}
+            kubectl -n medibrain set image deployment/medibrain-server server=${REGISTRY}/medibrain-server:${IMAGE_TAG}
+            kubectl -n medibrain set image deployment/medibrain-web web=${REGISTRY}/medibrain-web:${IMAGE_TAG}
+            kubectl -n medibrain rollout status deployment/medibrain-server --timeout=300s
+            kubectl -n medibrain rollout status deployment/medibrain-web --timeout=300s
+          '''
         }
       }
     }
