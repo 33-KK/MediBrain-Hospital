@@ -1,6 +1,6 @@
 # MediBrain-Hospital 项目计划与进度总览
 
-> 医疗知识图谱智能问答平台 · 更新日期：2026-08-18（v1.2.0 集群验证完成）
+> 医疗知识图谱智能问答平台 · 更新日期：2026-08-19（v1.2.0 全链路收尾完成）
 
 ## 一、项目目标
 
@@ -20,8 +20,8 @@
 | 8 | 向量化（Milvus + bge-m3 索引 + 问答兜底，v1.2.0） | ✅ 完成 |
 | 9 | 数据扩充（多病种知识库） | ✅ 完成（5 病种扩充工具链 + 全链路导入） |
 | 10 | 运维增强（问答统计等） | ⏸ 已取消 |
-| 11 | 真实集群部署 + CI/CD 落地 | ⏳ 待做 |
-| 12 | 文档与商用化收尾 | 🔄 进行中 |
+| 11 | 真实集群部署 + CI/CD 落地 | 🔄 进行中（CI/CD ✅ 已跑通；真实集群交付物就绪，待云服务器执行） |
+| 12 | 文档与商用化收尾 | ✅ 完成（含安全合规 P3 全项） |
 
 ## 三、已实现功能（截至 v1.2.0）
 
@@ -65,8 +65,8 @@
 - [x] **web v1.2.0 对齐**：镜像 medibrain-web:v1.2.0 已构建推送并 rollout
 
 ### P1 工程化
-- [ ] **真实集群部署**：云服务器（或更正式环境）部署，解决 Pod 访问宿主机服务（hostAliases 方案）
-- [ ] **CI/CD 落地**：Jenkinsfile 已在，需配置 Jenkins 凭据（docker-registry/kubeconfig/server-env）实际跑通
+- [x] **CI/CD 落地**：Jenkins（Docker 容器，lts-jdk17）已部署，8 项插件 + kubeconfig/server-env 凭据已配置，`medibrain-pipeline` Job 全流程跑通：lint/build → docker build → push(registry) → kind load → kubectl set image → rollout 验证（构建 #13 SUCCESS，镜像 `13-bd1f80ad` 已上线）
+- [ ] **真实集群部署**：交付物已就绪（`deploy/k8s/production/`：README + hostAliases 生产 manifest + `deploy-prod.sh` 一键脚本），待云服务器后执行
 - [x] **文档补全**：`docs/architecture.md`、`docs/database-schema.md`、`docs/api-design.md` 已完成
 
 ### P2 产品增强
@@ -75,9 +75,9 @@
 - [ ] 问答统计看板（原计划取消，如需可恢复：按疾病/维度/时间统计）
 
 ### P3 安全与合规
-- [ ] 生产密钥更换（JWT_SECRET、Neo4j 密码、MinIO 密钥脱离默认值）
-- [ ] 敏感接口限流（TTS/问答防滥用）
-- [ ] 医疗数据合规声明（LICENSE 补充、数据来源标注）
+- [x] 生产密钥更换（JWT_SECRET 随机化、Neo4j 集群改密、Mongo 启用认证 + 新凭据、MinIO 新密钥、LLM Key 占位符清理）——本地 .env 与集群 Secret 同步更新
+- [x] 敏感接口限流（Redis 计数：问答 30 次/60s/用户、TTS 10 次/60s/用户，429 带 TTL 提示，Redis 故障放行）——集群实测触发 429 通过
+- [x] 医疗数据合规声明（`docs/compliance.md`：免责/数据来源/隐私/安全基线清单）
 
 ## 五、验收标准对照
 
