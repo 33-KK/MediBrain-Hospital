@@ -54,16 +54,16 @@ pipeline {
         script {
           // 本地 kind 环境：将镜像导入集群节点（真实集群可移除本步）
           sh '''
-            if kind get clusters 2>/dev/null | grep -q medibrain; then
-              kind load docker-image ${REGISTRY}/medibrain-server:${IMAGE_TAG} --name medibrain
-              kind load docker-image ${REGISTRY}/medibrain-web:${IMAGE_TAG} --name medibrain
+            if kind get clusters 2>/dev/null | grep -q medibrain-prod; then
+              kind load docker-image ${REGISTRY}/medibrain-server:${IMAGE_TAG} --name medibrain-prod
+              kind load docker-image ${REGISTRY}/medibrain-web:${IMAGE_TAG} --name medibrain-prod
             fi
           '''
         }
         withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
           sh '''
-            # kind 本地环境：kubeconfig 指向 127.0.0.1，需改为宿主机可达地址
-            sed -i 's|https://127.0.0.1:[0-9]*|https://host.docker.internal:63061|' ${KUBECONFIG}
+            # kind 本地环境：kubeconfig 指向 127.0.0.1，需改为宿主机可达地址（保留端口）
+            sed -i 's|https://127.0.0.1:|https://host.docker.internal:|' ${KUBECONFIG}
             kubectl --insecure-skip-tls-verify -n medibrain set image deployment/medibrain-server server=${REGISTRY}/medibrain-server:${IMAGE_TAG}
             kubectl --insecure-skip-tls-verify -n medibrain set image deployment/medibrain-web web=${REGISTRY}/medibrain-web:${IMAGE_TAG}
             kubectl --insecure-skip-tls-verify -n medibrain rollout status deployment/medibrain-server --timeout=300s
