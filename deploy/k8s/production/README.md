@@ -64,3 +64,23 @@ bash deploy/k8s/production/deploy-prod.sh
 - Milvus / Ollama 需防火墙白名单
 - 生产环境建议启用 TLS（Ingress annotations）
 - 镜像拉取使用 imagePullSecrets（私有仓库认证）
+
+## 六、模拟环境验证记录（2026-08-19）
+
+本流程已在本地 kind 模拟生产集群（`medibrain-prod`，3 节点）完整跑通：
+
+| 步骤 | 结果 |
+|------|------|
+| deploy-prod.sh 1-6 步 | 全部通过（Neo4j/Mongo/Redis + server + web） |
+| 图谱数据迁移 | 49439 节点 / 303293 关系（`scripts/graph-migration`，0 失败） |
+| 登录 / Profile / Health | 200 |
+| 5 病种问答（高血压/糖尿病/冠心病/胃溃疡/类风湿） | 全部 201 命中图谱 |
+| 历史记录 | 正常记录 |
+| 限流（30 次/分） | 25×200 + 10×429，符合预期 |
+
+**模拟中修复的问题（已合入生产 manifest）**：
+1. `server-deployment.prod.yaml` 缺少 `REDIS_HOST: medibrain-redis` 环境变量 → 已补充（缺失会导致 Redis 连接失败、健康检查不过、Pod 反复重启）
+2. 模拟环境适配点（仅模拟需要，真实集群不受影响）：
+   - 镜像名改为本机 `localhost:5000` 并 `kind load`（真实集群用 Harbor + imagePullSecrets）
+   - hostAliases IP 改为 `192.168.65.254`（Docker Desktop host-gateway，真实集群替换为服务器内网 IP）
+   - 模拟集群需先创建 Mongo 用户与导入 Neo4j 数据（真实集群同此步骤）

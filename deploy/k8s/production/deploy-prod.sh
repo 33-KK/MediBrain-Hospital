@@ -15,6 +15,7 @@ set -euo pipefail
 : "${REGISTRY:?请设置 REGISTRY (私有镜像仓库)}"
 : "${OLLAMA_HOST:?请设置 OLLAMA_HOST (Ollama 服务器内网 IP)}"
 : "${MILVUS_HOST:?请设置 MILVUS_HOST (Milvus 服务器内网 IP)}"
+: "${IMAGE_TAG:=latest}"
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$DIR/../../.." && pwd)"
@@ -33,12 +34,12 @@ kubectl apply -f "$K8S/configmap.yaml"
 kubectl apply -f "$K8S/secret.yaml"
 
 echo "==> 4/6 server (注入 hostAliases 生产清单)"
-sed -e "s|registry.example.com/medibrain/medibrain-server|${REGISTRY}/medibrain-server|" \
+sed -e "s|registry.example.com/medibrain/medibrain-server:latest|${REGISTRY}/medibrain-server:${IMAGE_TAG}|" \
     -e "s|192.168.1.100|${OLLAMA_HOST}|" \
     "$DIR/server-deployment.prod.yaml" | kubectl apply -f -
 
 echo "==> 5/6 web + Ingress"
-sed -e "s|registry.example.com/medibrain/medibrain-web|${REGISTRY}/medibrain-web|" \
+sed -e "s|localhost:5000/medibrain/medibrain-web:v1.2.0|${REGISTRY}/medibrain-web:${IMAGE_TAG}|" \
     "$K8S/web/deployment.yaml" | kubectl apply -f -
 kubectl apply -f "$K8S/web/service.yaml" -f "$K8S/web/ingress.yaml"
 

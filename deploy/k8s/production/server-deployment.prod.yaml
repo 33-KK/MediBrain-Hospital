@@ -36,6 +36,10 @@ spec:
                 secretKeyRef:
                   name: medibrain-secret
                   key: MONGO_URI
+            - name: REDIS_HOST
+              value: medibrain-redis
+            - name: NEO4J_URI
+              value: bolt://medibrain-neo4j:7687
             - name: NEO4J_PASSWORD
               valueFrom:
                 secretKeyRef:
