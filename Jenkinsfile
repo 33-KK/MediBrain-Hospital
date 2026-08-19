@@ -51,7 +51,7 @@ pipeline {
 
     stage('Deploy to K8s') {
       when {
-        branch 'main'
+        expression { env.GIT_BRANCH == 'main' || env.BRANCH_NAME == 'main' || env.GIT_BRANCH == null }
       }
       steps {
         script {
