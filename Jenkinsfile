@@ -50,9 +50,6 @@ pipeline {
     }
 
     stage('Deploy to K8s') {
-      when {
-        expression { env.GIT_BRANCH == 'main' || env.BRANCH_NAME == 'main' || env.GIT_BRANCH == null }
-      }
       steps {
         script {
           // 本地 kind 环境：将镜像导入集群节点（真实集群可移除本步）
