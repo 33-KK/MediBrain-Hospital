@@ -19,7 +19,7 @@
 | 7 | 图谱数据迁移（4.9 万实体全量迁移开发库 → 集群） | ✅ 完成 |
 | 8 | 向量化（Milvus + bge-m3 索引 + 问答兜底，v1.2.0） | ✅ 完成 |
 | 9 | 数据扩充（多病种知识库） | ✅ 完成（5 病种扩充工具链 + 全链路导入） |
-| 10 | 真实集群部署 + CI/CD 落地 | 🔄 进行中（CI/CD ✅ 已跑通；真实集群交付物就绪，待云服务器执行） |
+| 10 | 真实集群部署 + CI/CD 落地 | 🔄 基本完成：CI/CD ✅ 全绿（构建 #18 SUCCESS）；模拟生产集群 ✅ 全流程验证；真实云服务器部署待购机执行 |
 | 11 | 文档与商用化收尾 | ✅ 完成（含安全合规 P3 全项） |
 
 ## 三、已实现功能（截至 v1.2.0）
@@ -64,8 +64,9 @@
 - [x] **web v1.2.0 对齐**：镜像 medibrain-web:v1.2.0 已构建推送并 rollout
 
 ### P1 工程化
-- [x] **CI/CD 落地**：Jenkins（Docker 容器，lts-jdk17）已部署，8 项插件 + kubeconfig/server-env 凭据已配置，`medibrain-pipeline` Job 全流程跑通：lint/build → docker build → push(registry) → kind load → kubectl set image → rollout 验证（构建 #13 SUCCESS，镜像 `13-bd1f80ad` 已上线）
-- [ ] **真实集群部署**：交付物已就绪（`deploy/k8s/production/`：README + hostAliases 生产 manifest + `deploy-prod.sh` 一键脚本），待云服务器后执行
+- [x] **CI/CD 落地**：Jenkins（Docker 容器，lts-jdk17）已部署，8 项插件 + kubeconfig/server-env 凭据已配置，`medibrain-pipeline` Job 全流程跑通：lint/build → docker build → push(registry) → kind load → kubectl set image → rollout 验证（构建 #18 SUCCESS，镜像 `18-f8488420` 已上线模拟生产集群）
+- [x] **模拟生产集群全流程验证**（2026-08-19）：kind `medibrain-prod` 3 节点跑通 `deploy-prod.sh` 全 6 步；Neo4j 数据迁移 49439 节点/303293 关系 0 失败；登录/问答/历史/限流全链路回归通过；Jenkins CI 已切换部署目标至模拟生产集群并验证（期间修复：server 生产 manifest 缺 `REDIS_HOST`、deploy-prod.sh web 镜像 sed 不匹配、Jenkins kubeconfig 凭据指向旧集群、kubeconfig UTF-16 编码问题）
+- [ ] **真实集群部署**：交付物已就绪（`deploy/k8s/production/`：README + hostAliases 生产 manifest + `deploy-prod.sh` 一键脚本），模拟环境已验证，待云服务器后执行（换 kubeconfig/REGISTRY/OLLAMA_HOST/MILVUS_HOST 即可）
 - [x] **文档补全**：`docs/architecture.md`、`docs/database-schema.md`、`docs/api-design.md` 已完成
 
 ### P2 产品增强
