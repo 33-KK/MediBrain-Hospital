@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medibrain-server
+  namespace: medibrain
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medibrain-server
+  template:
+    metadata:
+      labels:
+        app: medibrain-server
+    spec:
+      hostAliases:
+        - ip: "192.168.1.100"
+          hostnames:
+            - "host.docker.internal"
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: server
+          image: registry.example.com/medibrain/medibrain-server:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: medibrain-config
+            - secretRef:
+                name: medibrain-secret
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: medibrain-secret
+                  key: MONGO_URI
+            - name: NEO4J_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medibrain-secret
+                  key: NEO4J_PASSWORD
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: '2'
+              memory: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medibrain-server
+  namespace: medibrain
+spec:
+  selector:
+    app: medibrain-server
+  ports:
+    - port: 3000
+      targetPort: 3000
