@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: medibrain-web:latest
+          image: localhost:5000/medibrain/medibrain-web:v1.2.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
