@@ -7,14 +7,13 @@ export interface ChatOptions {
   temperature?: number;
   maxTokens?: number;
   stream?: boolean;
+  timeoutMs?: number;
 }
 
 export interface LlmProvider {
   readonly name: string;
-  chat(
-    messages: ChatMessage[],
-    options?: ChatOptions,
-  ): Promise<AsyncGenerator<string | null, void, unknown>> | Promise<string>;
+  chat(messages: ChatMessage[], options?: ChatOptions): Promise<string>;
+  health(): Promise<boolean>;
 }
 
 export interface EmbeddingProvider {

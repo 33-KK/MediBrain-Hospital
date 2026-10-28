@@ -53,7 +53,7 @@ export class TtsController {
     @Param('file') file: string,
     @Res({ passthrough: true }) res: Response,
   ): Promise<StreamableFile> {
-    const stream = this.ttsService.getAudioStream(file);
+    const stream = await this.ttsService.getAudioStream(file);
     res.set({
       'Content-Type': 'audio/mpeg',
       'Content-Disposition': `inline; filename="${file}"`,

@@ -1,0 +1,42 @@
+{
+  "checkedAt": "2026-10-14T10:42:01.993Z",
+  "status": "passed",
+  "baseUrl": "http://localhost:8090",
+  "frontendBuild": "passed",
+  "dockerBuild": "passed",
+  "webImage": "medibrain-web:orange-ui-20261014",
+  "webImageManifest": "sha256:24178303b8a95ca9e48c2d5766b3b40a4212cec6a867f3a09b91487b4d01d35f",
+  "webReplicas": {
+    "desired": 2,
+    "ready": 2,
+    "updated": 2
+  },
+  "checks": [
+    "login-validation-and-enter-submit",
+    "register-two-fields-and-clear-validation",
+    "suggestion-rotation-and-real-question-send",
+    "graph-answer-and-expandable-evidence",
+    "reference-library-answer-and-source-cards",
+    "shift-enter-newline-enter-send",
+    "new-conversation-preserves-two-owned-history-records",
+    "deployed-brand-navigation-and-composer"
+  ],
+  "mobile": {
+    "width": 390,
+    "height": 844,
+    "documentScrollWidth": 390,
+    "longInputCharacters": 2000,
+    "inputBottom": 764,
+    "controlsTop": 764,
+    "overlap": false,
+    "viewportReset": true
+  },
+  "fixtureCleanup": "passed",
+  "previewProcess": "stopped",
+  "screenshots": [
+    "docs/screenshots/orange-ui-desktop-2026-10-14.png",
+    "docs/screenshots/orange-ui-mobile-2026-10-14.png",
+    "docs/screenshots/orange-ui-mobile-input-2026-10-14.png",
+    "docs/screenshots/orange-ui-register-2026-10-14.png"
+  ]
+}

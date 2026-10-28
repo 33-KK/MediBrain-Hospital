@@ -1,0 +1,43 @@
+{
+  "preparedOn": "2026-10-11",
+  "preparedBy": "Codex",
+  "adaptation": "简短中文释义草稿，依据官方中文页面改写；非 WHO 原文、非官方译文，尚未经医学专业审核",
+  "records": [
+    {
+      "id": "who-hypertension-zh-draft",
+      "diseaseName": "高血压",
+      "summaryZhDraft": "高血压与动脉内压力持续偏高有关，患者可能没有明显不适，因此不能仅凭症状判断。长期控制不佳可能损害心脏、脑和肾脏。超重、活动不足、高盐饮食和过量饮酒等因素与患病风险有关。",
+      "sourceId": "who-hypertension-zh",
+      "sourceUrl": "https://www.who.int/zh/news-room/fact-sheets/detail/hypertension",
+      "sourceUpdatedOn": "2025-09-25",
+      "sourceSections": ["概述", "风险因素", "症状", "不控制高血压可能会带来的并发症"],
+      "targetProposal": {"label": "疾病", "name": "高血压", "property": "疾病简介"},
+      "review": {"status": "pending", "required": ["entity-mapping", "clinical-applicability", "reuse-conditions"]},
+      "publishToQa": false
+    },
+    {
+      "id": "who-diabetes-zh-draft",
+      "diseaseName": "糖尿病",
+      "summaryZhDraft": "胰岛素分泌不足或作用受损可造成血糖调节异常，并与糖尿病有关。可能表现为口渴、尿频、疲倦、视物模糊或非主动的体重下降；部分患者早期表现不明显。生活方式干预有助于预防或延缓2型糖尿病，不能把这一结论直接用于1型糖尿病。",
+      "sourceId": "who-diabetes-zh",
+      "sourceUrl": "https://www.who.int/zh/news-room/fact-sheets/detail/diabetes",
+      "sourceUpdatedOn": "2024-11-14",
+      "sourceSections": ["概述", "症状", "1型糖尿病", "2型糖尿病", "预防"],
+      "targetProposal": {"label": "疾病", "name": "糖尿病", "property": "疾病简介"},
+      "review": {"status": "pending", "required": ["entity-mapping", "clinical-applicability", "reuse-conditions"]},
+      "publishToQa": false
+    },
+    {
+      "id": "who-copd-zh-draft",
+      "diseaseName": "慢性阻塞性肺疾病",
+      "summaryZhDraft": "慢性阻塞性肺疾病会造成气流受限，可出现气短、长期咳嗽、咳痰、喘息和疲倦。烟草烟雾、空气污染及职业性粉尘或化学物质暴露是相关危险因素。病情可能发生急性加重；疾病名称与肺气肿、慢性支气管炎之间的关系仍需按具体临床定义区分。",
+      "sourceId": "who-copd-zh",
+      "sourceUrl": "https://www.who.int/zh/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)",
+      "sourceUpdatedOn": "2026-06-10",
+      "sourceSections": ["概述", "症状", "起因"],
+      "targetProposal": {"label": "疾病", "name": "慢性阻塞性肺疾病", "property": "疾病简介"},
+      "review": {"status": "pending", "required": ["entity-mapping", "clinical-applicability", "reuse-conditions"]},
+      "publishToQa": false
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-10-14T09:02:43.468Z",
+  "mode": "apply",
+  "status": "passed",
+  "collections": [
+    {
+      "collection": "users",
+      "total": 4,
+      "legacyRecords": 4,
+      "remainingLegacyRecords": 0
+    },
+    {
+      "collection": "qa_records",
+      "total": 37,
+      "legacyRecords": 37,
+      "remainingLegacyRecords": 0
+    }
+  ],
+  "backup": "D:\\MediBrain-Hospital\\data\\backups\\user-classification-2026-10-14T09-02-43-470Z.json"
+}

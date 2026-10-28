@@ -1,0 +1,174 @@
+{
+  "timestamp": "2026-10-14T10:42:03.388Z",
+  "status": "passed",
+  "deployments": [
+    {
+      "name": "medibrain-server",
+      "desired": 2,
+      "ready": 2,
+      "updated": 2,
+      "images": [
+        "medibrain-server:single-login-20261014-tts"
+      ]
+    },
+    {
+      "name": "medibrain-web",
+      "desired": 2,
+      "ready": 2,
+      "updated": 2,
+      "images": [
+        "medibrain-web:orange-ui-20261014"
+      ]
+    }
+  ],
+  "pods": [
+    {
+      "name": "medibrain-server-778cd7b8bd-jz7ng",
+      "node": "medibrain-prod-worker2",
+      "containers": [
+        {
+          "name": "server",
+          "ready": true,
+          "image": "docker.io/library/medibrain-server:single-login-20261014-tts",
+          "imageID": "docker.io/library/import-2026-10-14@sha256:c5f491fd4a137a9ce4f40f0d8af6a8d37936f8b734acd61c42113eae28dc5a39",
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "medibrain-server-778cd7b8bd-tqwgf",
+      "node": "medibrain-prod-worker",
+      "containers": [
+        {
+          "name": "server",
+          "ready": true,
+          "image": "docker.io/library/medibrain-server:single-login-20261014-tts",
+          "imageID": "docker.io/library/import-2026-10-14@sha256:c5f491fd4a137a9ce4f40f0d8af6a8d37936f8b734acd61c42113eae28dc5a39",
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "medibrain-web-57f97ccdd9-pbfg5",
+      "node": "medibrain-prod-worker",
+      "containers": [
+        {
+          "name": "web",
+          "ready": true,
+          "image": "docker.io/library/medibrain-web:orange-ui-20261014",
+          "imageID": "docker.io/library/import-2026-10-14@sha256:15f849bef4163f7c4b3ad939c3684b9bd69aca7e260181145590fd835a847191",
+          "restartCount": 0
+        }
+      ]
+    },
+    {
+      "name": "medibrain-web-57f97ccdd9-zv768",
+      "node": "medibrain-prod-worker2",
+      "containers": [
+        {
+          "name": "web",
+          "ready": true,
+          "image": "docker.io/library/medibrain-web:orange-ui-20261014",
+          "imageID": "docker.io/library/import-2026-10-14@sha256:15f849bef4163f7c4b3ad939c3684b9bd69aca7e260181145590fd835a847191",
+          "restartCount": 0
+        }
+      ]
+    }
+  ],
+  "health": {
+    "status": "ok",
+    "info": {
+      "mongodb": {
+        "status": "up"
+      },
+      "redis": {
+        "status": "up"
+      },
+      "neo4j": {
+        "status": "up"
+      }
+    },
+    "error": {},
+    "details": {
+      "mongodb": {
+        "status": "up"
+      },
+      "redis": {
+        "status": "up"
+      },
+      "neo4j": {
+        "status": "up"
+      },
+      "milvus": {
+        "status": "up",
+        "required": false
+      },
+      "embedding": {
+        "status": "up",
+        "required": false
+      },
+      "llm": {
+        "status": "up",
+        "required": false
+      }
+    }
+  },
+  "cleanup": {
+    "temporaryUsers": 0,
+    "temporaryHistory": 0
+  },
+  "acceptance": {
+    "content": {
+      "runId": "54bf897f010d",
+      "timestamp": "2026-10-08T02:37:36.379Z",
+      "status": "passed",
+      "cleanup": true
+    },
+    "performance": {
+      "runId": "98c2dd2735f6",
+      "timestamp": "2026-10-08T02:38:51.085Z",
+      "status": "passed",
+      "cleanup": true
+    },
+    "cold": {
+      "runId": "588a0b46c4f9",
+      "timestamp": "2026-10-08T02:44:10.324Z",
+      "status": "passed",
+      "cleanup": true
+    }
+  },
+  "singleLoginAcceptance": {
+    "checkedAt": "2026-10-14T09:03:24.310Z",
+    "baseUrl": "http://localhost:8090/api",
+    "checks": [
+      "registration-and-token-have-no-classification",
+      "legacy-account-password-compatible-and-metadata-ignored",
+      "management-endpoints-removed-for-all-accounts",
+      "history-list-delete-and-clear-are-owner-only",
+      "knowledge-and-read-only-disease-graph-available"
+    ],
+    "status": "passed",
+    "fixtureCleanup": "passed"
+  },
+  "classificationMigration": {
+    "checkedAt": "2026-10-14T09:02:43.468Z",
+    "mode": "apply",
+    "status": "passed",
+    "collections": [
+      {
+        "collection": "users",
+        "total": 4,
+        "legacyRecords": 4,
+        "remainingLegacyRecords": 0
+      },
+      {
+        "collection": "qa_records",
+        "total": 37,
+        "legacyRecords": 37,
+        "remainingLegacyRecords": 0
+      }
+    ],
+    "backup": "D:\\MediBrain-Hospital\\data\\backups\\user-classification-2026-10-14T09-02-43-470Z.json"
+  },
+  "browserEvidenceRecord": "docs/orange-ui-2026-10-14.md"
+}

@@ -1,10 +1,11 @@
+const { requireDependency, requiredEnv } = require('../runtime.cjs');
 const fs = require('fs');
 const path = require('path');
-const neo4j = require('neo4j-driver');
+const neo4j = requireDependency('neo4j-driver');
 
 const TARGET = process.env.TARGET || 'bolt://localhost:7687';
 const USER = process.env.USER || 'neo4j';
-const PASS = process.env.PASS || 'qm5E!tkB7batqBX';
+const PASS = requiredEnv("PASS", "NEO4J_PASSWORD");
 const DATA_DIR = path.join(__dirname, 'data');
 
 const RELS = {

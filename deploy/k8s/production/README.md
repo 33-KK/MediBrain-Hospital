@@ -50,6 +50,8 @@ export MILVUS_HOST=192.168.1.100                 # Milvus 服务器内网 IP
 bash deploy/k8s/production/deploy-prod.sh
 ```
 
+首次部署且集群尚无 `medibrain-secret` 时，指定已填好真实值的 `SECRET_FILE`。脚本拒绝占位符，并保留已有集群的 Secret。配置中的 Ollama 和 Milvus 地址分别使用 `OLLAMA_HOST` / `MILVUS_HOST`。
+
 ## 四、前置准备清单
 
 - [ ] 云服务器 ≥ 4 核 16G（Neo4j + Mongo + Redis + 2 副本 server）

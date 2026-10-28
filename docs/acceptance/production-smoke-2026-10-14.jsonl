@@ -1,0 +1,7 @@
+{"liveHealth":{"status":"ok","info":{"mongodb":{"status":"up"},"redis":{"status":"up"},"neo4j":{"status":"up"}},"error":{},"details":{"mongodb":{"status":"up"},"redis":{"status":"up"},"neo4j":{"status":"up"},"milvus":{"status":"up","required":false},"embedding":{"status":"up","required":false},"llm":{"status":"up","required":false}}}}
+{"actualQa":"passed","provider":"graph","dimension":"忌吃食物","sources":4,"elapsedMs":5318}
+{"actualEmbedding":"passed","dimensions":1024,"semanticCandidates":5}
+{"retiredManagementRoutes":"passed","historyPersistence":"passed"}
+{"actualTts":"passed","bytes":14256,"sample":"C:\\Users\\33\\AppData\\Local\\Temp\\medibrain-tts-smoke-86c5659a.mp3"}
+{"deployedSmoke":"passed","paidModelCalls":0}
+{"ownedSmokeFixtureCleanup":"passed"}

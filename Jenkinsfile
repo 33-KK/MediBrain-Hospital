@@ -20,12 +20,16 @@ pipeline {
       steps { checkout scm }
     }
 
-    stage('Lint & Build') {
-      agent { docker { image 'node:20-alpine' } }
+    stage('Lint, Test & Build') {
+      agent { docker { image 'node:24-alpine' } }
       steps {
         dir('apps/server') {
           sh 'npm ci'
+          sh 'npm run lint:check'
+          sh 'npm test -- --runInBand'
+          sh 'npm run test:e2e -- --runInBand'
           sh 'npm run build'
+          sh 'npm run test:regression'
         }
         dir('apps/web') {
           sh 'npm ci'

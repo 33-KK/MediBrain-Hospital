@@ -1,0 +1,565 @@
+{
+  "runId": "98c2dd2735f6",
+  "timestamp": "2026-10-08T02:38:51.085Z",
+  "base": "http://localhost:8090/api",
+  "status": "passed",
+  "criteria": {
+    "errors": 0,
+    "burstP95Ms": 8000,
+    "steadyP95Ms": 5000,
+    "cachedTtsMs": 500,
+    "coldQaMs": 8000
+  },
+  "phases": {
+    "qaConcurrency1": {
+      "requests": 8,
+      "errors": 0,
+      "p50Ms": 346,
+      "p95Ms": 927,
+      "maxMs": 927,
+      "throughputPerSecond": 1.99,
+      "elapsedMs": 4027,
+      "samples": [
+        {
+          "ms": 337,
+          "modelAccepted": true
+        },
+        {
+          "ms": 927,
+          "modelAccepted": true
+        },
+        {
+          "ms": 662,
+          "modelAccepted": true
+        },
+        {
+          "ms": 225,
+          "modelAccepted": true
+        },
+        {
+          "ms": 346,
+          "modelAccepted": true
+        },
+        {
+          "ms": 664,
+          "modelAccepted": true
+        },
+        {
+          "ms": 655,
+          "modelAccepted": true
+        },
+        {
+          "ms": 211,
+          "modelAccepted": true
+        }
+      ]
+    },
+    "qaConcurrency2": {
+      "requests": 8,
+      "errors": 0,
+      "p50Ms": 793,
+      "p95Ms": 1230,
+      "maxMs": 1230,
+      "throughputPerSecond": 2.31,
+      "elapsedMs": 3465,
+      "samples": [
+        {
+          "ms": 356,
+          "modelAccepted": true
+        },
+        {
+          "ms": 969,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1230,
+          "modelAccepted": true
+        },
+        {
+          "ms": 793,
+          "modelAccepted": true
+        },
+        {
+          "ms": 485,
+          "modelAccepted": true
+        },
+        {
+          "ms": 920,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1227,
+          "modelAccepted": true
+        },
+        {
+          "ms": 783,
+          "modelAccepted": true
+        }
+      ]
+    },
+    "qaConcurrency4": {
+      "requests": 8,
+      "errors": 0,
+      "p50Ms": 1384,
+      "p95Ms": 1824,
+      "maxMs": 1824,
+      "throughputPerSecond": 2.31,
+      "elapsedMs": 3460,
+      "samples": [
+        {
+          "ms": 1777,
+          "modelAccepted": true
+        },
+        {
+          "ms": 682,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1295,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1465,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1384,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1382,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1824,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1683,
+          "modelAccepted": true
+        }
+      ]
+    },
+    "qaConcurrency8": {
+      "requests": 8,
+      "errors": 0,
+      "p50Ms": 1784,
+      "p95Ms": 3510,
+      "maxMs": 3510,
+      "throughputPerSecond": 2.28,
+      "elapsedMs": 3511,
+      "samples": [
+        {
+          "ms": 989,
+          "modelAccepted": true
+        },
+        {
+          "ms": 687,
+          "modelAccepted": true
+        },
+        {
+          "ms": 3207,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1154,
+          "modelAccepted": true
+        },
+        {
+          "ms": 3510,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1784,
+          "modelAccepted": true
+        },
+        {
+          "ms": 2401,
+          "modelAccepted": true
+        },
+        {
+          "ms": 2573,
+          "modelAccepted": true
+        }
+      ]
+    },
+    "qaSteady4": {
+      "requests": 80,
+      "errors": 0,
+      "p50Ms": 1162,
+      "p95Ms": 1168,
+      "maxMs": 1219,
+      "throughputPerSecond": 3.43,
+      "elapsedMs": 23300,
+      "samples": [
+        {
+          "ms": 1219,
+          "modelAccepted": true
+        },
+        {
+          "ms": 638,
+          "modelAccepted": true
+        },
+        {
+          "ms": 349,
+          "modelAccepted": true
+        },
+        {
+          "ms": 928,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1158,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1157,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1163,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1163,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1158,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1158,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1157,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1163,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1163,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1165,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1168,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1158,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1163,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1165,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1165,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1152,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1158,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1172,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1167,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1172,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1171,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1154,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1163,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1160,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1161,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1167,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1166,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1165,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1164,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1162,
+          "modelAccepted": true
+        },
+        {
+          "ms": 1159,
+          "modelAccepted": true
+        }
+      ]
+    },
+    "tts": {
+      "requests": 6,
+      "errors": 0,
+      "p50Ms": 2487,
+      "p95Ms": 2488,
+      "maxMs": 2488,
+      "throughputPerSecond": 2.39,
+      "elapsedMs": 2509,
+      "samples": [
+        {
+          "ms": 2487,
+          "bytes": 33840,
+          "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+        },
+        {
+          "ms": 2487,
+          "bytes": 33840,
+          "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+        },
+        {
+          "ms": 2486,
+          "bytes": 33840,
+          "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+        },
+        {
+          "ms": 2488,
+          "bytes": 33840,
+          "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+        },
+        {
+          "ms": 2487,
+          "bytes": 33840,
+          "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+        },
+        {
+          "ms": 2488,
+          "bytes": 33840,
+          "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+        }
+      ],
+      "cached": {
+        "ms": 20,
+        "bytes": 33840,
+        "hash": "1c09adb2b5a67b684abde14bcb1efa6994abe80ef01930a46f04630203707657"
+      }
+    }
+  },
+  "cleanup": true
+}

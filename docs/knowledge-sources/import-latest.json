@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-10-11T10:43:31.838Z",
+  "status": "imported",
+  "collection": "official-medical-2026-10",
+  "documents": 1024,
+  "englishSummaries": 1016,
+  "chinesePdfs": 5,
+  "whoReferences": 3,
+  "pdfPages": 284,
+  "clinicalFactWrites": 0,
+  "clinicalAcceptance": "pending-professional-review",
+  "namedBusinessEntitiesBefore": 49439,
+  "namedBusinessEntitiesAfter": 49439,
+  "backupFile": "data/backups/knowledge-library-2026-10-11T10-43-31-838Z.json"
+}

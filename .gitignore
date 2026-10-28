@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.*.local
+deploy/k8s/secret.local.yaml
 kubeconfig-*
 
 # Dependencies
@@ -29,3 +30,7 @@ npm-debug.log*
 # Runtime data
 data/
 uploads/
+
+# Python helper caches
+__pycache__/
+*.py[cod]

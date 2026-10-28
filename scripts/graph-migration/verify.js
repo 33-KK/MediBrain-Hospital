@@ -1,4 +1,5 @@
-const neo4j = require('neo4j-driver');
+const { requireDependency, requiredEnv } = require('../runtime.cjs');
+const neo4j = requireDependency('neo4j-driver');
 
 async function stats(uri, user, pass, name) {
   const d = neo4j.driver(uri, neo4j.auth.basic(user, pass));
@@ -18,8 +19,8 @@ async function stats(uri, user, pass, name) {
 }
 
 (async () => {
-  await stats('bolt://localhost:7687', 'neo4j', 'qm5E!tkB7batqBX', '源库');
-  await stats('bolt://localhost:7688', 'neo4j', 'medibrain-secret', '集群库');
+  await stats(process.env.SRC_URI || 'bolt://localhost:7687', process.env.SRC_USER || 'neo4j', requiredEnv('SRC_PASS', 'NEO4J_PASSWORD'), '源库');
+  await stats(process.env.DST_URI || 'bolt://localhost:7688', process.env.DST_USER || 'neo4j', requiredEnv('DST_PASS', 'PASS'), '集群库');
 })().catch((e) => {
   console.error('ERR:', e.message);
   process.exit(1);

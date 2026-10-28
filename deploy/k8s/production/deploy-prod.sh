@@ -21,17 +21,32 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$DIR/../../.." && pwd)"
 K8S="$ROOT/deploy/k8s"
 
+# A tracked placeholder must never replace the running cluster's credentials.
+if ! kubectl get secret medibrain-secret -n medibrain >/dev/null 2>&1; then
+  : "${SECRET_FILE:?首次部署请指定真实 SECRET_FILE，或先通过密钥管理系统创建 Secret}"
+  if grep -q 'REPLACE_' "$SECRET_FILE"; then
+    echo 'SECRET_FILE 仍含占位符，终止部署。' >&2
+    exit 1
+  fi
+fi
+
 echo "==> 1/6 命名空间"
 kubectl apply -f "$K8S/namespace.yaml"
+
+echo '==> 配置与密钥（保留现有 Secret）'
+sed -e "s|host.docker.internal:11434|${OLLAMA_HOST}:11434|g" \
+    -e "s|host.docker.internal:19540|${MILVUS_HOST}:19540|g" \
+    "$K8S/configmap.yaml" | kubectl apply -f -
+if ! kubectl get secret medibrain-secret -n medibrain >/dev/null 2>&1; then
+  kubectl apply -f "$SECRET_FILE"
+fi
 
 echo "==> 2/6 基础设施 (Neo4j / Mongo / Redis)"
 kubectl apply -f "$K8S/infra/neo4j.yaml" -f "$K8S/infra/mongo.yaml" -f "$K8S/infra/redis.yaml"
 kubectl rollout status statefulset/medibrain-neo4j -n medibrain --timeout=600s
 kubectl rollout status statefulset/medibrain-mongo -n medibrain --timeout=600s
 
-echo "==> 3/6 配置与密钥"
-kubectl apply -f "$K8S/configmap.yaml"
-kubectl apply -f "$K8S/secret.yaml"
+echo "==> 3/6 检查服务配置"
 
 echo "==> 4/6 server (注入 hostAliases 生产清单)"
 sed -e "s|registry.example.com/medibrain/medibrain-server:latest|${REGISTRY}/medibrain-server:${IMAGE_TAG}|" \
@@ -39,7 +54,7 @@ sed -e "s|registry.example.com/medibrain/medibrain-server:latest|${REGISTRY}/med
     "$DIR/server-deployment.prod.yaml" | kubectl apply -f -
 
 echo "==> 5/6 web + Ingress"
-sed -e "s|localhost:5000/medibrain/medibrain-web:v1.2.0|${REGISTRY}/medibrain-web:${IMAGE_TAG}|" \
+sed -e "s|medibrain-web:conversations-20261014|${REGISTRY}/medibrain-web:${IMAGE_TAG}|" \
     "$K8S/web/deployment.yaml" | kubectl apply -f -
 kubectl apply -f "$K8S/web/service.yaml" -f "$K8S/web/ingress.yaml"
 

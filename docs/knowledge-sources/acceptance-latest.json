@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-11T12:11:22.306Z",
+  "baseUrl": "http://localhost:8090/api",
+  "checks": [
+    {
+      "name": "authenticated-statistics",
+      "elapsedMs": 30
+    },
+    {
+      "name": "chinese-search-and-query-validation",
+      "results": 6,
+      "elapsedMs": 67
+    },
+    {
+      "name": "english-summary-original-checksum",
+      "elapsedMs": 26
+    },
+    {
+      "name": "pdf-page-integrity-and-draft-labels"
+    },
+    {
+      "name": "qa-reference-cards-without-generated-clinical-facts",
+      "elapsedMs": 389
+    },
+    {
+      "name": "clinical-answers-keep-original-graph-facts-with-related-references",
+      "elapsedMs": 4779
+    }
+  ],
+  "stats": {
+    "documents": 1024,
+    "englishSummaries": 1016,
+    "chinesePdfs": 5,
+    "whoReferences": 3,
+    "pdfPages": 284
+  },
+  "status": "passed",
+  "fixtureCleanup": "passed"
+}

@@ -2,6 +2,8 @@
 
 > 覆盖：开发环境（Compose）→ 镜像构建与推送 → K8s 部署（kind 演示 / 真实集群）→ CI/CD 接入。
 
+前后端构建与后端运行镜像使用 Node.js 24。本机 `medibrain-prod` 集群当前使用统一登录版本，发布记录见 [统一登录变更](single-login-2026-10-14.md)，访问端口可通过 `scripts/maintenance/start-local-access.ps1` 恢复。
+
 ## 一、架构总览
 
 ```
@@ -16,7 +18,7 @@
   ├── MongoDB (用户/问答历史)   ── StatefulSet + PVC
   ├── Redis   (缓存)            ── Deployment
   ├── Neo4j   (知识图谱)        ── StatefulSet + PVC
-  └── DeepSeek API (LLM 推理, 云端)
+  └── Ollama (本机 qwen2.5:7b + bge-m3，可配置云端模型)
 ```
 
 ## 二、开发环境（Docker Compose）
@@ -26,7 +28,7 @@
 docker compose -f deploy/docker/docker-compose.yml up -d
 
 # 2. 导入图谱数据（仅首次）→ 见 deploy/docker/README 或 scripts/graph-migration
-# 3. 配置环境变量（参考 apps/server/.env.example）
+# 3. 配置环境变量（参考根目录 .env.example）
 
 # 4. 启动后端（开发模式）
 cd apps/server && npm install && npm run start:dev
@@ -50,15 +52,16 @@ docker push <registry>/medibrain-web:v1.0.0
 
 已在本机验证：`localhost:5000` registry 推送/拉取成功。
 
-当前版本：**v1.2.0**（server：新增向量检索兜底 EmbeddingModule；web：无改动，沿用 v1.1.0）。升级命令：
+本次会话与资料问答发布镜像为后端 `medibrain-server:conversations-20261014`、前端 `medibrain-web:conversations-20261014`，验收见 [会话与资料问答](conversations-2026-10-14.md)。重新发布到现有 kind 集群：
 
 ```bash
-docker build -f deploy/docker/server.Dockerfile -t localhost:5000/medibrain-server:v1.2.0 .
-docker push localhost:5000/medibrain-server:v1.2.0
-kind load docker-image localhost:5000/medibrain-server:v1.2.0 --name medibrain
-kubectl apply -f deploy/k8s/configmap.yaml
-kubectl set image deployment/medibrain-server -n medibrain server=localhost:5000/medibrain-server:v1.2.0
-kubectl rollout status deployment/medibrain-server -n medibrain
+docker build -f deploy/docker/server.Dockerfile -t medibrain-server:conversations-20261014 .
+docker build -f deploy/docker/web.Dockerfile -t medibrain-web:conversations-20261014 .
+kind load docker-image medibrain-server:conversations-20261014 medibrain-web:conversations-20261014 --name medibrain-prod
+kubectl --kubeconfig kubeconfig-prod.utf8 --context kind-medibrain-prod -n medibrain set image deployment/medibrain-server server=medibrain-server:conversations-20261014
+kubectl --kubeconfig kubeconfig-prod.utf8 --context kind-medibrain-prod -n medibrain set image deployment/medibrain-web web=medibrain-web:conversations-20261014
+kubectl --kubeconfig kubeconfig-prod.utf8 --context kind-medibrain-prod -n medibrain rollout status deployment/medibrain-server
+kubectl --kubeconfig kubeconfig-prod.utf8 --context kind-medibrain-prod -n medibrain rollout status deployment/medibrain-web
 ```
 
 ## 四、K8s 部署
@@ -77,7 +80,7 @@ kind load docker-image <registry>/medibrain-web:v1.0.0 --name <cluster>
 kubectl apply -f deploy/k8s/namespace.yaml
 kubectl apply -f deploy/k8s/infra/       # Mongo/Redis/Neo4j
 kubectl apply -f deploy/k8s/configmap.yaml
-kubectl apply -f deploy/k8s/secret.yaml  # ⚠️ 必须替换为真实密钥
+kubectl apply -f deploy/k8s/secret.local.yaml  # 首次部署前从模板生成；此文件必须保持 Git 忽略
 kubectl apply -f deploy/k8s/server/      # Deployment + Service + HPA
 kubectl apply -f deploy/k8s/web/         # Deployment + Service + Ingress
 
@@ -98,7 +101,7 @@ curl http://localhost:8090/api/health # {"status":"ok",...}
 kubectl apply -f deploy/k8s/namespace.yaml
 kubectl apply -f deploy/k8s/infra/
 kubectl apply -f deploy/k8s/configmap.yaml
-kubectl apply -f deploy/k8s/secret.yaml   # 用 Vault/External Secrets 注入生产密钥
+kubectl apply -f deploy/k8s/secret.local.yaml   # 或用 Vault/External Secrets 注入；已有集群保留当前真实密钥
 kubectl apply -f deploy/k8s/server/
 kubectl apply -f deploy/k8s/web/          # 按需修改 Ingress host
 
@@ -144,6 +147,6 @@ kubectl -n medibrain rollout status deployment/medibrain-server
 | 环境变量 | 位置 | 说明 |
 |----------|------|------|
 | JWT_SECRET | Secret | 生产必须更换 |
-| LLM_API_KEY | Secret | DeepSeek API Key |
+| DEEPSEEK_API_KEY / BAILIAN_API_KEY | Secret | 使用对应云端 provider 时配置；Ollama 无需 API Key |
 | NEO4J_AUTH | Secret | neo4j/密码 |
 | MONGO_URI/REDIS_HOST 等 | ConfigMap | 非敏感配置 |

@@ -86,7 +86,15 @@ watch(
 
     <el-empty v-if="!loading && !data" description="请输入疾病名称查询详情" />
 
-    <template v-if="data">
+    <el-alert
+      v-if="data?.reviewRequired"
+      :title="data.reviewReason"
+      type="warning"
+      :closable="false"
+      show-icon
+    />
+
+    <template v-if="data?.disease">
       <el-card class="disease-card" shadow="never">
         <template #header>
           <div class="card-header">
@@ -95,6 +103,11 @@ watch(
           </div>
         </template>
         <p class="desc">{{ data.disease.desc || '暂无简介' }}</p>
+        <el-descriptions v-if="Object.keys(data.disease.attributes || {}).length" :column="1" border>
+          <el-descriptions-item v-for="(value, key) in data.disease.attributes" :key="key" :label="String(key)">
+            {{ value }}
+          </el-descriptions-item>
+        </el-descriptions>
       </el-card>
 
       <div class="relations">

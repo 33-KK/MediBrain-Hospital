@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-14",
+  "scope": "source-and-deployed-verification",
+  "backendUnitTests": { "passedSuites": 14, "passedTests": 91 },
+  "offlineRegression": { "passedChecks": 13 },
+  "backendE2e": { "passedTests": 1 },
+  "backendLint": "passed",
+  "backendBuild": "passed",
+  "frontendTypecheckAndBuild": "passed",
+  "registrationUi": {
+    "status": "verified-in-static-preview",
+    "screenshot": "docs/screenshots/single-login-register-2026-10-14.png"
+  },
+  "deployment": "passed",
+  "images": {
+    "server": "medibrain-server:single-login-20261014-tts",
+    "web": "medibrain-web:single-login-20261014"
+  },
+  "databaseClassificationCleanup": "applied-with-backup",
+  "liveIntegration": "passed",
+  "deployedSingleUserAcceptance": "passed",
+  "productionSmoke": "passed",
+  "deployedUi": {
+    "status": "verified",
+    "screenshot": "docs/screenshots/single-login-deployed-2026-10-14.png"
+  },
+  "blocker": null
+}

@@ -4,6 +4,10 @@
   "description": "",
   "author": "",
   "private": true,
+  "engines": { "node": ">=24" },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": { "js-yaml": "^4.3.2" }
+  },
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
@@ -13,7 +17,10 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint:check": "eslint \"{src,test}/**/*.ts\"",
     "test": "jest",
+    "test:regression": "node ../../scripts/diagnostics/audit.cjs",
+    "test:integration": "node ../../scripts/diagnostics/integration.cjs",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",

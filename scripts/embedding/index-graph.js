@@ -1,3 +1,4 @@
+const { requireDependency, requiredEnv } = require('../runtime.cjs');
 /**
  * 离线索引：Neo4j 图谱实体 → bge-m3 embedding → Milvus
  * 用法：node scripts/embedding/index-graph.js
@@ -6,14 +7,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const neo4j = require('neo4j-driver');
-const { MilvusClient, DataType } = require('@zilliz/milvus2-sdk-node');
+const { createHash } = require('node:crypto');
+const neo4j = requireDependency('neo4j-driver');
+const { MilvusClient, DataType } = requireDependency('@zilliz/milvus2-sdk-node');
 
 const MILVUS_ADDR = process.env.MILVUS_ADDRESS || 'localhost:19540';
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
 const NEO4J_URI = process.env.SRC_URI || 'bolt://localhost:7687';
 const NEO4J_USER = process.env.SRC_USER || 'neo4j';
-const NEO4J_PASS = process.env.SRC_PASS || 'qm5E!tkB7batqBX';
+const NEO4J_PASS = requiredEnv("SRC_PASS", "NEO4J_PASSWORD");
 const COLLECTION = 'entities';
 const DIM = 1024;
 const BATCH = 32; // embedding 批大小
@@ -112,17 +114,31 @@ async function insertRows(rows) {
   // 每批 100 条写入 Milvus
   for (let i = 0; i < rows.length; i += 100) {
     const chunk = rows.slice(i, i + 100);
-    const res = await client.insert({
+    const existing = await client.query({
       collection_name: COLLECTION,
-      data: chunk.map((r) => ({
+      filter: 'entity_name in ' + JSON.stringify(chunk.map(row => row.entity_name)),
+      output_fields: ['id', 'entity_name', 'entity_type'],
+      consistency_level: 'Strong', limit: 1000, timeout: 5000,
+    });
+    if (existing.status?.error_code !== 'Success') throw new Error('已有实体查询失败');
+    const ids = new Map(existing.data.map(row => [JSON.stringify([row.entity_type, row.entity_name]), row.id]));
+    const inserts = [];
+    const updates = [];
+    for (const r of chunk) {
+      const row = {
         entity_name: r.entity_name,
         entity_type: r.entity_type,
         entity_desc: r.entity_desc,
         embedding: r.embedding,
-      })),
-    });
-    if (res.status?.error_code !== 'Success') {
-      throw new Error(`insert 失败: ${JSON.stringify(res.status)}`);
+      };
+      const id = ids.get(JSON.stringify([r.entity_type, r.entity_name]));
+      if (id === undefined) inserts.push(row);
+      else updates.push({ ...row, id });
+    }
+    for (const [method, data] of [['insert', inserts], ['upsert', updates]]) {
+      if (!data.length) continue;
+      const res = await client[method]({ collection_name: COLLECTION, data, timeout: 10000 });
+      if (res.status?.error_code !== 'Success') throw new Error(`${method} 失败`);
     }
   }
 }
@@ -144,46 +160,12 @@ async function main() {
 
   await ensureCollection();
 
-  // 进度恢复：已有进度且 total 一致 → 从断点继续，否则重新去重
+  // 默认更新全部实体；显式 --resume 且图谱快照相同时才恢复进度。
   const prog = readProgress();
   const entities = await loadEntities();
-  let start;
-  if (prog.total === entities.length) {
-    start = prog.done;
-    console.log(`断点续传: 从 ${start}/${entities.length} 继续`);
-  } else {
-    const existing = await client.query({
-      collection_name: COLLECTION,
-      filter: 'entity_name != ""',
-      output_fields: ['entity_name'],
-      limit: 16384,
-    });
-    const seen = new Set((existing.data || []).map((r) => r.entity_name));
-    console.log(`Milvus 已有实体(首页): ${seen.size}`);
-    // Milvus query 单次 limit 上限 16384，需分页拉全量去重
-    const stat = await client.getCollectionStatistics({ collection_name: COLLECTION });
-    const totalCount = Number(stat.data?.rowCount || 0);
-    for (let offset = 16384; offset < totalCount; offset += 16384) {
-      const page = await client.query({
-        collection_name: COLLECTION,
-        filter: 'entity_name != ""',
-        output_fields: ['entity_name'],
-        limit: 16384,
-        offset,
-      });
-      for (const row of page.data || []) seen.add(row.entity_name);
-    }
-    console.log(`Milvus 已有实体(全量分页): ${seen.size}`);
-    entities.splice(0, 0); // no-op
-    // 过滤已存在的
-    let removed = 0;
-    for (let i = entities.length - 1; i >= 0; i--) {
-      if (seen.has(entities[i].entity_name)) { entities.splice(i, 1); removed++; }
-    }
-    console.log(`去重后待索引: ${entities.length} (去掉 ${removed})`);
-    start = 0;
-    writeProgress({ done: 0, total: entities.length });
-  }
+  const fingerprint = createHash('sha256').update(JSON.stringify(entities)).digest('hex');
+  const start = process.argv.includes('--resume') && prog.fingerprint === fingerprint ? prog.done : 0;
+  writeProgress({ done: start, total: entities.length, fingerprint });
 
   let done = 0;
   const t0 = Date.now();
@@ -202,7 +184,7 @@ async function main() {
     if (done % 1000 < BATCH || i + BATCH >= entities.length) {
       const rate = Math.round(done / ((Date.now() - t0) / 1000));
       console.log(`已索引 ${i + batch.length}/${entities.length} (${rate} 条/秒)`);
-      writeProgress({ done: done, total: entities.length });
+      writeProgress({ done: i + batch.length, total: entities.length, fingerprint });
     }
   }
   fs.unlinkSync(PROGRESS_FILE);

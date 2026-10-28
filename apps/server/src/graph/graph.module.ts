@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { GraphController } from './graph.controller';
-import { GraphManageService } from './graph-manage.service';
+import { GraphSynchronizationService } from './graph-synchronization.service';
+import { EmbeddingModule } from '../embedding/embedding.module';
 
 @Module({
-  controllers: [GraphController],
-  providers: [GraphManageService],
+  imports: [EmbeddingModule],
+  providers: [GraphSynchronizationService],
 })
 export class GraphModule {}

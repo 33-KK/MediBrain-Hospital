@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { FirstAidKit, User, Lock } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
@@ -14,18 +15,7 @@ const loading = ref(false)
 const form = reactive({
   username: '',
   password: '',
-  identity: '普通用户',
 })
-
-const IDENTITY_OPTIONS = [
-  '医生',
-  '护士',
-  '药师',
-  '医学生',
-  '患者',
-  '患者家属',
-  '普通用户',
-]
 
 const rules: FormRules = {
   username: [
@@ -38,16 +28,19 @@ const rules: FormRules = {
   ],
 }
 
+watch(mode, () => formRef.value?.clearValidate())
+
 async function submit() {
-  await formRef.value?.validate()
+  if (loading.value || !formRef.value) return
+  const valid = await formRef.value.validate().catch(() => false)
+  if (!valid || loading.value) return
   loading.value = true
   try {
     if (mode.value === 'login') {
       await userStore.login(form.username, form.password)
       ElMessage.success('登录成功')
     } else {
-      await userStore.register(form.username, form.password, form.identity)
-      await userStore.login(form.username, form.password)
+      await userStore.register(form.username, form.password)
       ElMessage.success('注册成功，已自动登录')
     }
     router.push('/chat')
@@ -61,97 +54,181 @@ async function submit() {
 
 <template>
   <div class="login-page">
-    <div class="card">
-      <div class="brand">
-        <el-icon :size="40" color="#409EFF"><FirstAidKit /></el-icon>
-        <h1>MediBrain-Hospital</h1>
-        <p>医疗知识图谱智能问答平台</p>
-      </div>
+    <header class="login-header">
+      <span class="header-brand"><el-icon :size="27"><FirstAidKit /></el-icon>MediBrain</span>
+      <span class="header-subtitle">医疗知识图谱智能问答平台</span>
+    </header>
+    <main class="login-main">
+      <section class="login-card" aria-labelledby="login-title">
+        <div class="welcome">
+          <span class="welcome-icon"><el-icon :size="29"><FirstAidKit /></el-icon></span>
+          <h1 id="login-title">{{ mode === 'login' ? '欢迎来到 MediBrain' : '创建 MediBrain 账号' }}</h1>
+          <p>让医学知识更易查找，让健康问题有据可循</p>
+        </div>
 
-      <el-tabs v-model="mode" stretch>
-        <el-tab-pane label="登录" name="login">
-          <el-form ref="formRef" :model="form" :rules="rules" size="large">
-            <el-form-item prop="username">
-              <el-input v-model="form.username" placeholder="用户名" :prefix-icon="'User'" />
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input v-model="form.password" type="password" placeholder="密码" show-password :prefix-icon="'Lock'" @keyup.enter="submit" />
-            </el-form-item>
-            <el-button type="primary" class="submit" size="large" :loading="loading" @click="submit">
-              登 录
-            </el-button>
-          </el-form>
-        </el-tab-pane>
+        <el-tabs v-model="mode" stretch class="login-tabs">
+          <el-tab-pane label="登录" name="login" :disabled="loading" />
+          <el-tab-pane label="注册" name="register" :disabled="loading" />
+        </el-tabs>
 
-        <el-tab-pane label="注册" name="register">
-          <el-form ref="formRef" :model="form" :rules="rules" size="large">
-            <el-form-item prop="username">
-              <el-input v-model="form.username" placeholder="用户名（至少 3 位）" :prefix-icon="'User'" />
-            </el-form-item>
-            <el-form-item prop="identity">
-              <el-select
-                v-model="form.identity"
-                placeholder="选择您的身份"
-                size="large"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="opt in IDENTITY_OPTIONS"
-                  :key="opt"
-                  :label="opt"
-                  :value="opt"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input v-model="form.password" type="password" placeholder="密码（至少 6 位）" show-password :prefix-icon="'Lock'" @keyup.enter="submit" />
-            </el-form-item>
-            <el-button type="primary" class="submit" size="large" :loading="loading" @click="submit">
-              注 册
-            </el-button>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+        <el-form ref="formRef" :model="form" :rules="rules" size="large" label-position="top" @submit.prevent="submit">
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="form.username" :placeholder="mode === 'register' ? '设置用户名，至少 3 个字符' : '请输入用户名'" :prefix-icon="User" autocomplete="username" :disabled="loading" />
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="form.password" type="password" :placeholder="mode === 'register' ? '设置密码，至少 6 位' : '请输入密码'" show-password :prefix-icon="Lock" :autocomplete="mode === 'register' ? 'new-password' : 'current-password'" :disabled="loading" />
+          </el-form-item>
+          <el-button type="primary" native-type="submit" class="submit" size="large" :loading="loading">
+            {{ mode === 'login' ? '登录' : '注册并进入' }}
+          </el-button>
+        </el-form>
+        <p class="login-note">知识查询 · 图谱探索 · 智能问答</p>
+      </section>
+      <p class="login-footer">医学知识辅助参考，不能替代专业诊断与治疗</p>
+    </main>
   </div>
 </template>
 
 <style scoped>
 .login-page {
-  height: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #fcfaf7;
+}
+
+.login-header {
+  min-height: 80px;
   display: flex;
   align-items: center;
+  gap: 24px;
+  padding: 20px 40px;
+  border-bottom: 1px solid #f0e5da;
+  background: #fff5eb;
+}
+
+.header-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mb-accent);
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -.7px;
+}
+
+.header-subtitle {
+  color: #88796c;
+  font-size: 13px;
+}
+
+.login-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #e8f4fd 0%, #f0f7ff 50%, #e3f0fa 100%);
+  gap: 22px;
+  padding: 44px 20px;
 }
 
-.card {
-  width: 420px;
-  padding: 40px 36px 24px;
+.login-card {
+  width: min(100%, 432px);
+  padding: 34px 36px 26px;
+  border: 1px solid #eee7df;
+  border-radius: 14px;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 32px rgba(91, 59, 28, .045);
 }
 
-.brand {
+.welcome {
   text-align: center;
   margin-bottom: 24px;
 }
 
-.brand h1 {
-  margin-top: 8px;
-  font-size: 22px;
-  color: #303133;
+.welcome-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 15px;
+  border-radius: 14px;
+  background: var(--mb-accent-soft);
+  color: var(--mb-accent);
 }
 
-.brand p {
-  margin-top: 6px;
-  font-size: 13px;
-  color: #909399;
+.welcome h1 {
+  color: var(--mb-text);
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -.4px;
 }
+
+.welcome p {
+  margin-top: 9px;
+  color: var(--mb-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.login-tabs { margin-bottom: 22px; }
+.login-tabs :deep(.el-tabs__header) { margin-bottom: 0; }
+.login-tabs :deep(.el-tabs__nav-wrap::after) {
+  height: 1px;
+  background: var(--mb-line);
+}
+.login-tabs :deep(.el-tabs__item) {
+  font-size: 15px;
+  font-weight: 500;
+}
+.login-card :deep(.el-form-item) { margin-bottom: 22px; }
+.login-card :deep(.el-form-item__label) {
+  margin-bottom: 7px;
+  color: #56585b;
+  font-size: 13px;
+}
+.login-card :deep(.el-input__wrapper) {
+  min-height: 44px;
+  border-radius: 7px;
+}
+.login-card :deep(.el-input__prefix) { color: #a3a19d; }
 
 .submit {
   width: 100%;
-  margin-top: 8px;
+  height: 44px;
+  margin-top: 6px;
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.login-note {
+  margin-top: 24px;
+  color: #9c948c;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.login-footer {
+  color: #8b8781;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .login-header {
+    min-height: 72px;
+    padding: 17px 20px;
+    gap: 6px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .header-brand { font-size: 23px; }
+  .header-subtitle { margin-left: 37px; font-size: 10px; }
+  .login-main { padding: 30px 18px; }
+  .login-card { padding: 28px 24px 22px; }
+  .welcome h1 { font-size: 20px; }
 }
 </style>

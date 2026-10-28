@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: localhost:5000/medibrain/medibrain-web:v1.2.0
+          image: medibrain-web:conversations-20261014
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

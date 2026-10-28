@@ -1,9 +1,10 @@
+const { requireDependency, requiredEnv } = require('../runtime.cjs');
 const fs = require('fs');
-const neo4j = require('neo4j-driver');
+const neo4j = requireDependency('neo4j-driver');
 
 const SRC_URI = process.env.SRC_URI || 'bolt://localhost:7687';
 const SRC_USER = process.env.SRC_USER || 'neo4j';
-const SRC_PASS = process.env.SRC_PASS || 'qm5E!tkB7batqBX';
+const SRC_PASS = requiredEnv("SRC_PASS", "NEO4J_PASSWORD");
 const OUT = process.env.OUT || 'graph-dump.cypher';
 
 const BATCH = 5000;

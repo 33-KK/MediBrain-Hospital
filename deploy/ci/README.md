@@ -14,7 +14,7 @@ stages:
 
 lint:
   stage: lint
-  image: node:20-alpine
+  image: node:24-alpine
   script:
     - npm ci
     - npm run lint

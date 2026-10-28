@@ -26,7 +26,14 @@ export class LlmGateway {
     return this.provider.name;
   }
 
-  chat(messages: Parameters<LlmProvider['chat']>[0], options?: Parameters<LlmProvider['chat']>[1]) {
+  health(): Promise<boolean> {
+    return this.provider.health();
+  }
+
+  chat(
+    messages: Parameters<LlmProvider['chat']>[0],
+    options?: Parameters<LlmProvider['chat']>[1],
+  ) {
     return this.provider.chat(messages, options);
   }
 }

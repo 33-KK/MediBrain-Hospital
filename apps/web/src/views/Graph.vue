@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import * as echarts from 'echarts'
+import * as echarts from 'echarts/core'
+import { GraphChart, type GraphSeriesOption } from 'echarts/charts'
+import { TooltipComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
+echarts.use([GraphChart, TooltipComponent, CanvasRenderer])
 import { ElMessage } from 'element-plus'
 import { qaApi } from '@/api'
 import { useRouter } from 'vue-router'
@@ -12,6 +16,7 @@ const searching = ref(false)
 const stats = ref<{ nodes: number; edges: number }>({ nodes: 0, edges: 0 })
 
 let chart: echarts.ECharts | null = null
+const nodeLabels = new Map<string, string>()
 
 const TYPE_COLORS: Record<string, string> = {
   疾病: '#f56c6c',
@@ -35,11 +40,12 @@ async function search() {
   try {
     const res = await qaApi.disease(name)
     if (!res || !res.disease) {
+      chart?.clear()
+      stats.value = { nodes: 0, edges: 0 }
       ElMessage.warning(`图谱中未找到疾病「${name}」`)
       return
     }
     renderGraph(res)
-    stats.value = { nodes: 1 + res.relations.length, edges: res.relations.length }
   } catch {
     /* 拦截器已提示 */
   } finally {
@@ -49,37 +55,51 @@ async function search() {
 
 function renderGraph(res: any) {
   if (!chart) return
+  nodeLabels.clear()
+  const rootId = `疾病:${res.disease.name}`
+  nodeLabels.set(rootId, '疾病')
 
-  const nodes: echarts.GraphSeriesOption['data'] = [
+  const nodes: GraphSeriesOption['data'] = [
     {
+      id: rootId,
       name: res.disease.name,
       symbolSize: 60,
       itemStyle: { color: TYPE_COLORS['疾病'] },
       label: { show: true, fontSize: 14, fontWeight: 'bold' },
     },
   ]
-  const links: echarts.GraphSeriesOption['links'] = []
-  const seen = new Set<string>()
+  const links: GraphSeriesOption['links'] = []
+  const seen = new Set<string>([rootId])
+  const seenLinks = new Set<string>()
 
   for (const rel of res.relations) {
-    if (seen.has(rel.entity)) continue
-    seen.add(rel.entity)
-    nodes.push({
-      name: rel.entity,
-      symbolSize: 28,
-      itemStyle: { color: TYPE_COLORS[rel.label || 'default'] },
-      label: { show: true, fontSize: 10 },
-    })
+    const nodeId = `${rel.label || 'unknown'}:${rel.entity}`
+    if (!seen.has(nodeId)) {
+      seen.add(nodeId)
+      nodeLabels.set(nodeId, rel.label || 'unknown')
+      nodes.push({
+        id: nodeId,
+        name: rel.entity,
+        symbolSize: 28,
+        itemStyle: { color: TYPE_COLORS[rel.label || 'default'] || TYPE_COLORS.default },
+        label: { show: true, fontSize: 10 },
+      })
+    }
+    const edgeId = JSON.stringify([rootId, rel.relation, nodeId])
+    if (seenLinks.has(edgeId)) continue
+    seenLinks.add(edgeId)
     links.push({
-      source: res.disease.name,
-      target: rel.entity,
+      source: rootId,
+      target: nodeId,
       label: { show: true, formatter: rel.relation, fontSize: 10 },
       lineStyle: { color: '#a0a4ad' },
     })
   }
+  stats.value = { nodes: nodes.length, edges: links.length }
 
   chart.setOption({
     tooltip: {
+      renderMode: 'richText',
       formatter: (p: any) =>
         p.dataType === 'node' ? `${p.data.name}` : `${p.data.source} --${p.data.label?.formatter}--> ${p.data.target}`,
     },
@@ -123,7 +143,7 @@ watch(chartRef, (el) => {
   if (el && !chart) {
     chart = echarts.init(el)
     chart.on('click', (p: any) => {
-      if (p.dataType === 'node' && p.data.name !== diseaseName.value.trim()) {
+      if (p.dataType === 'node' && nodeLabels.get(p.data.id) === '疾病') {
         goDetail(p.data.name)
       }
     })
@@ -136,9 +156,7 @@ function resize() {
 }
 
 onMounted(() => {
-  nextTick(() => {
-    search()
-  })
+  if (diseaseName.value.trim()) nextTick(() => { void search() })
 })
 
 onBeforeUnmount(() => {

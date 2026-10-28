@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { User, UserIdentity, UserRole } from './entities/user.entity';
+import { User } from './entities/user.entity';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 
 @Injectable()
@@ -27,8 +27,6 @@ export class AuthService {
       username: dto.username,
       password: hashed,
       displayName: dto.username,
-      identity: dto.identity ?? UserIdentity.NORMAL,
-      role: UserRole.USER,
       isActive: true,
       createdAt: new Date(),
     });
@@ -44,11 +42,9 @@ export class AuthService {
         _id: true,
         username: true,
         password: true,
-        role: true,
-        identity: true,
         isActive: true,
         displayName: true,
-      } as never,
+      },
     });
     if (!user) throw new UnauthorizedException('用户名或密码错误');
 
@@ -56,16 +52,20 @@ export class AuthService {
     if (!ok) throw new UnauthorizedException('用户名或密码错误');
     if (!user.isActive) throw new UnauthorizedException('账号已被禁用');
 
-    delete (user as Partial<User>).password;
-    return { token: this.signToken(user), user };
+    return {
+      token: this.signToken(user),
+      user: {
+        userId: user._id.toString(),
+        username: user.username,
+        displayName: user.displayName,
+      },
+    };
   }
 
   private signToken(user: User): string {
     const payload = {
       sub: user._id.toString(),
       username: user.username,
-      role: user.role,
-      identity: user.identity,
     };
     return this.jwtService.sign(payload);
   }

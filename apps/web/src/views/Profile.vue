@@ -21,18 +21,6 @@ const userStore = useUserStore()
             <span class="value">{{ userStore.user?.username }}</span>
           </div>
           <div class="row">
-            <span class="label">角色</span>
-            <el-tag :type="userStore.role === 'admin' ? 'danger' : 'info'">
-              {{ userStore.role || 'user' }}
-            </el-tag>
-          </div>
-          <div class="row">
-            <span class="label">身份</span>
-            <el-tag type="warning">
-              {{ userStore.user?.identity || '普通用户' }}
-            </el-tag>
-          </div>
-          <div class="row">
             <span class="label">登录状态</span>
             <el-tag type="success">已登录</el-tag>
           </div>

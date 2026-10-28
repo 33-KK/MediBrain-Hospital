@@ -7,8 +7,10 @@ data:
   NODE_ENV: production
   PORT: '3000'
   JWT_EXPIRES: 7d
-  LLM_PROVIDER: deepseek
-  LLM_MODEL: deepseek-chat
+  LLM_PROVIDER: ollama
+  LLM_MODEL: qwen2.5:7b
+  OLLAMA_MODEL: qwen2.5:7b
+  OLLAMA_BASE_URL: http://host.docker.internal:11434
   # 向量检索（问答兜底）：宿主机 Ollama（bge-m3）+ 宿主机 Milvus
   EMBEDDING_MODEL: bge-m3
   EMBEDDING_BASE_URL: http://host.docker.internal:11434

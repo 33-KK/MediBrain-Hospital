@@ -1,8 +1,9 @@
+const { requireDependency, requiredEnv } = require('../runtime.cjs');
 const fs = require('fs');
 const path = require('path');
-const neo4j = require('neo4j-driver');
+const neo4j = requireDependency('neo4j-driver');
 
-const d = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', 'qm5E!tkB7batqBX'));
+const d = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', requiredEnv('NEO4J_PASSWORD')));
 
 const ALL_REL_TYPES = ['疾病的症状', '疾病所需检查', '疾病使用药品', '疾病宜吃食物', '疾病忌吃食物', '疾病并发疾病', '疾病所属科目', '治疗的方法', '疾病别名', '疾病易感人群'];
 

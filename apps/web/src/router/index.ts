@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,6 +25,12 @@ const router = createRouter({
           meta: { title: '智能问答' },
         },
         {
+          path: 'knowledge',
+          name: 'Knowledge',
+          component: () => import('@/views/Knowledge.vue'),
+          meta: { title: '医学资料库' },
+        },
+        {
           path: 'graph',
           name: 'Graph',
           component: () => import('@/views/Graph.vue'),
@@ -47,21 +54,24 @@ const router = createRouter({
           component: () => import('@/views/History.vue'),
           meta: { title: '问答历史' },
         },
-        {
-          path: 'graph-manage',
-          name: 'GraphManage',
-          component: () => import('@/views/GraphManage.vue'),
-          meta: { title: '图谱管理' },
-        },
       ],
     },
+    { path: '/:pathMatch(.*)*', redirect: '/chat' },
   ],
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const token = localStorage.getItem('token')
   if (!to.meta.public && !token) {
     return { name: 'Login' }
+  }
+  const store = useUserStore()
+  if (token) {
+    try { await store.refreshProfile() }
+    catch {
+      store.logout()
+      return to.meta.public ? true : { name: 'Login' }
+    }
   }
   if (to.meta.public && token) {
     return { name: 'Chat' }

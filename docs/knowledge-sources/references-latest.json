@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-10-11T09:36:53.503Z",
+  "catalogEntries": 11,
+  "attemptedReferences": 8,
+  "archivedPdfs": 5,
+  "metadataVerified": 3,
+  "unavailable": 0,
+  "databaseWrites": 0,
+  "qaPublishedRecords": 0,
+  "records": [
+    {
+      "id": "nhc-hyperlipidemia-diet-2023",
+      "requestedUrl": "https://www.nhc.gov.cn/wjw/c100378/202301/7faed9993c9b45aea158c5335346f282/files/1732844468018_41219.pdf",
+      "checkedAt": "2026-10-11T09:36:40.687Z",
+      "httpStatus": 200,
+      "bytes": 1527887,
+      "sha256": "595f0f3358c7b96580a548ee93923010b2a2ff672f500e3bf0859344811893d0",
+      "status": "archived",
+      "localFile": "data/external/references/nhc-hyperlipidemia-diet-2023/original.pdf",
+      "textExtracted": false
+    },
+    {
+      "id": "nhc-hypertension-diet-2023",
+      "requestedUrl": "https://www.nhc.gov.cn/wjw/c100378/202301/7faed9993c9b45aea158c5335346f282/files/1732844468193_68545.pdf",
+      "checkedAt": "2026-10-11T09:36:46.170Z",
+      "httpStatus": 200,
+      "bytes": 1901025,
+      "sha256": "e6c5227d95d289a810c953d895afc740ae922fc80ed4a8f1d5f4e39a9cd6c000",
+      "status": "archived",
+      "localFile": "data/external/references/nhc-hypertension-diet-2023/original.pdf",
+      "textExtracted": false
+    },
+    {
+      "id": "nhc-ckd-diet-2024",
+      "requestedUrl": "https://www.nhc.gov.cn/wjw/c100378/202402/afd5dda4bd6745fda10aad8d43a16369/files/1732845128797_75692.pdf",
+      "checkedAt": "2026-10-11T09:36:48.988Z",
+      "httpStatus": 200,
+      "bytes": 1136038,
+      "sha256": "35df6e62cec5f3d30fbdfe8cf52c3e9465e58ae443ba3a44378e37048196aef9",
+      "status": "archived",
+      "localFile": "data/external/references/nhc-ckd-diet-2024/original.pdf",
+      "textExtracted": false
+    },
+    {
+      "id": "nhc-stroke-diet-2026",
+      "requestedUrl": "https://www.nhc.gov.cn/sps/c100087/202604/a69d2fce21e040dc96cbc40b923a06d3/files/%E9%99%84%E4%BB%B61.%E6%88%90%E4%BA%BA%E8%84%91%E5%8D%92%E4%B8%AD%E9%A3%9F%E5%85%BB%E6%8C%87%E5%8D%97%EF%BC%882026%E5%B9%B4%E7%89%88%EF%BC%89-20260422152158566.pdf",
+      "checkedAt": "2026-10-11T09:36:50.306Z",
+      "httpStatus": 200,
+      "bytes": 1018078,
+      "sha256": "aa4c3a714ea4b88cdf588329047db3e692083344f357077a9220f5ae603100a8",
+      "status": "archived",
+      "localFile": "data/external/references/nhc-stroke-diet-2026/original.pdf",
+      "textExtracted": false
+    },
+    {
+      "id": "nhc-gout-diet-qa-2024",
+      "requestedUrl": "https://www.nhc.gov.cn/cms-search/downFiles/5d8a03a81dd949158e7d66283c0f1849.pdf",
+      "checkedAt": "2026-10-11T09:36:50.710Z",
+      "httpStatus": 200,
+      "bytes": 142194,
+      "sha256": "64c46e671674e66a7db5003433e0f9a159c0c73b599343268fc07c0ded5abaa8",
+      "status": "archived",
+      "localFile": "data/external/references/nhc-gout-diet-qa-2024/original.pdf",
+      "textExtracted": false
+    },
+    {
+      "id": "who-hypertension-zh",
+      "requestedUrl": "https://www.who.int/zh/news-room/fact-sheets/detail/hypertension",
+      "checkedAt": "2026-10-11T09:36:52.745Z",
+      "httpStatus": 200,
+      "bytes": 98108,
+      "sha256": "3ec4e4a8a37c4b4ab957a646681e31c6af6a251b1fe1fd89668616d33f617c65",
+      "status": "metadata-verified",
+      "pageTitle": "高血压",
+      "fullTextStored": false
+    },
+    {
+      "id": "who-diabetes-zh",
+      "requestedUrl": "https://www.who.int/zh/news-room/fact-sheets/detail/diabetes",
+      "checkedAt": "2026-10-11T09:36:53.022Z",
+      "httpStatus": 200,
+      "bytes": 95732,
+      "sha256": "8def5b255869c46793b5cc4f75a46abdb29fe888ccfd8cd8ee6721d76c0a7f76",
+      "status": "metadata-verified",
+      "pageTitle": "糖尿病",
+      "fullTextStored": false
+    },
+    {
+      "id": "who-copd-zh",
+      "requestedUrl": "https://www.who.int/zh/news-room/fact-sheets/detail/chronic-obstructive-pulmonary-disease-(copd)",
+      "checkedAt": "2026-10-11T09:36:53.503Z",
+      "httpStatus": 200,
+      "bytes": 98035,
+      "sha256": "9939dbd2d617dc909bda2b04f1ffb5574c975e95efd7313eb7617246c3998363",
+      "status": "metadata-verified",
+      "pageTitle": "慢性阻塞性肺病",
+      "fullTextStored": false
+    }
+  ]
+}

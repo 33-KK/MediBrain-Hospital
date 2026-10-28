@@ -1,34 +1,36 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { historyApi, type QaRecord } from '@/api'
-import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+import AnswerEvidence from '@/components/AnswerEvidence.vue'
 
-const userStore = useUserStore()
-const isAdmin = ref(userStore.role === 'admin')
-
+const router = useRouter()
 const loading = ref(false)
 const list = ref<QaRecord[]>([])
 const total = ref(0)
 const page = ref(1)
 const pageSize = ref(10)
-const viewAll = ref(false)
 
 const detailVisible = ref(false)
 const current = ref<QaRecord | null>(null)
+let loadVersion = 0
+let mounted = true
 
 async function load() {
+  const version = ++loadVersion
   loading.value = true
   try {
     const res = await historyApi.list({
-      all: viewAll.value || undefined,
       page: page.value,
       pageSize: pageSize.value,
     })
-    list.value = res.list
-    total.value = res.total
+    if (version === loadVersion && mounted) {
+      list.value = res.list
+      total.value = res.total
+    }
   } finally {
-    loading.value = false
+    if (version === loadVersion) loading.value = false
   }
 }
 
@@ -38,31 +40,26 @@ function showDetail(record: QaRecord) {
 }
 
 async function removeRecord(record: QaRecord) {
-  await ElMessageBox.confirm('确定删除这条问答记录吗？', '删除确认', {
-    type: 'warning',
-  })
-  await historyApi.remove(record._id)
-  ElMessage.success('已删除')
-  if (list.value.length === 1 && page.value > 1) page.value--
-  load()
+  try {
+    await ElMessageBox.confirm('确定删除这条问答记录吗？', '删除确认', { type: 'warning' })
+    await historyApi.remove(record._id)
+    ElMessage.success('已删除')
+    if (current.value?._id === record._id) { detailVisible.value = false; current.value = null }
+    if (list.value.length === 1 && page.value > 1) page.value--
+    await load()
+  } catch { /* 用户取消或请求失败，错误由 HTTP 拦截器提示。 */ }
 }
 
 async function clearAll() {
-  await ElMessageBox.confirm(
-    '确定清空全部问答记录吗？此操作不可恢复。',
-    '清空确认',
-    { type: 'warning' },
-  )
-  await historyApi.clear()
-  ElMessage.success('已清空')
-  page.value = 1
-  load()
-}
-
-function toggleView() {
-  viewAll.value = !viewAll.value
-  page.value = 1
-  load()
+  try {
+    await ElMessageBox.confirm('确定清空我的全部问答记录及会话吗？此操作不可恢复。', '清空确认', { type: 'warning' })
+    await historyApi.clear()
+    ElMessage.success('已清空')
+    detailVisible.value = false
+    current.value = null
+    page.value = 1
+    await load()
+  } catch { /* 用户取消或请求失败，错误由 HTTP 拦截器提示。 */ }
 }
 
 function formatTime(iso: string) {
@@ -70,7 +67,16 @@ function formatTime(iso: string) {
   return new Date(iso).toLocaleString('zh-CN', { hour12: false })
 }
 
-onMounted(load)
+function sourceLabel(record: QaRecord) {
+  if (record.snapshot?.grounding?.mode === 'document-excerpts') return record.snapshot.documentEvidence?.length ? '资料原文摘录' : '资料问答 · 未命中'
+  if (record.documentId) return '资料问答 · 旧记录'
+  if (record.snapshot?.grounding?.mode === 'reference-library') return record.snapshot.references?.length ? '相关资料检索' : '资料检索 · 未命中'
+  if (record.graphMatched) return '知识图谱'
+  return record.snapshot ? '依据不足／需补充' : '旧记录 · 来源未保存'
+}
+
+onMounted(() => { void load().catch(() => ElMessage.error('历史记录暂时无法加载')) })
+onUnmounted(() => { mounted = false; loadVersion++ })
 </script>
 
 <template>
@@ -79,15 +85,9 @@ onMounted(load)
       <template #header>
         <div class="header-bar">
           <span style="font-weight: 600">
-            {{ viewAll ? '全部问答记录' : '我的问答记录' }}
+            我的问答记录
           </span>
           <div class="header-actions">
-            <el-switch
-              v-if="isAdmin"
-              v-model="viewAll"
-              active-text="查看全部"
-              @change="toggleView"
-            />
             <el-button
               type="danger"
               plain
@@ -115,7 +115,7 @@ onMounted(load)
       >
         <el-table-column label="问题" min-width="220">
           <template #default="{ row }">
-            <span class="question-cell" @click="showDetail(row)">
+            <span class="question-cell" @click="showDetail(row as QaRecord)">
               {{ row.question }}
             </span>
           </template>
@@ -125,18 +125,10 @@ onMounted(load)
             <span class="answer-preview">{{ row.answer.slice(0, 60) }}</span>
           </template>
         </el-table-column>
-        <el-table-column v-if="viewAll" label="用户" width="110">
-          <template #default="{ row }">
-            <span>{{ row.username }}</span>
-            <el-tag v-if="row.identity" size="small" type="warning" class="id-tag">
-              {{ row.identity }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="图谱命中断言" width="130">
+        <el-table-column label="信息来源" width="150">
           <template #default="{ row }">
             <el-tag :type="row.graphMatched ? 'success' : 'info'" size="small">
-              {{ row.graphMatched ? '命中' : '未命中' }}
+              {{ sourceLabel(row as QaRecord) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -147,10 +139,10 @@ onMounted(load)
         </el-table-column>
         <el-table-column label="操作" width="90" fixed="right">
           <template #default="{ row }">
-            <el-button link type="primary" size="small" @click="showDetail(row)">
+            <el-button link type="primary" size="small" @click="showDetail(row as QaRecord)">
               查看
             </el-button>
-            <el-button link type="danger" size="small" @click="removeRecord(row)">
+            <el-button link type="danger" size="small" @click="removeRecord(row as QaRecord)">
               删除
             </el-button>
           </template>
@@ -168,15 +160,16 @@ onMounted(load)
       </div>
     </el-card>
 
-    <el-drawer v-model="detailVisible" size="45%" title="问答详情">
+    <el-drawer v-model="detailVisible" size="min(680px, 94vw)" title="问答详情">
       <div v-if="current" class="detail">
+        <el-button v-if="current.conversationId" type="primary" plain @click="router.push({ path: '/chat', query: { conversationId: current.conversationId } })">打开会话，继续追问</el-button>
         <div class="detail-row">
           <span class="d-label">问题</span>
           <div class="d-value question">{{ current.question }}</div>
         </div>
         <div class="detail-row">
           <span class="d-label">回答</span>
-          <div class="d-value answer">{{ current.answer }}</div>
+          <div class="d-value answer"><div v-if="!current.snapshot?.sections?.length" class="plain-answer">{{ current.answer }}</div><AnswerEvidence v-if="current.snapshot" :detail="current.snapshot" /><p v-else class="legacy-note">这条旧记录未保存详细引用，无法还原当时的证据。</p><p class="legacy-note">回答仅供医学知识参考，不能替代专业诊断与治疗。</p></div>
         </div>
         <div v-if="current.entityNames?.length" class="detail-row">
           <span class="d-label">关联实体</span>
@@ -195,16 +188,12 @@ onMounted(load)
           <span class="d-label">信息来源</span>
           <div class="d-value">
             <el-tag size="small" :type="current.graphMatched ? 'success' : 'info'">
-              {{ current.graphMatched ? '知识图谱' : '模型直答' }}
+              {{ sourceLabel(current) }}
             </el-tag>
             <el-tag v-if="current.provider" size="small" type="primary">
               {{ current.provider }}
             </el-tag>
           </div>
-        </div>
-        <div class="detail-row">
-          <span class="d-label">提问身份</span>
-          <div class="d-value">{{ current.identity || '普通用户' }}</div>
         </div>
         <div class="detail-row">
           <span class="d-label">提问时间</span>
@@ -229,7 +218,7 @@ onMounted(load)
 }
 
 .question-cell {
-  color: #409eff;
+  color: var(--mb-accent, #c55220);
   cursor: pointer;
   font-weight: 500;
 }
@@ -245,10 +234,6 @@ onMounted(load)
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.id-tag {
-  margin-left: 6px;
 }
 
 .pager {
@@ -292,8 +277,11 @@ onMounted(load)
   background: #f5f7fa;
   border-radius: 8px;
   padding: 12px;
-  white-space: pre-wrap;
 }
+
+.plain-answer { white-space: pre-wrap; }
+.legacy-note { margin: 12px 0 0; font-size: 11px; line-height: 1.8; color: #909399; }
+@media (max-width: 480px) { .detail-row { flex-direction: column; gap: 6px; } .header-bar { gap: 12px; } }
 
 .entity-tag {
   margin: 0 6px 6px 0;

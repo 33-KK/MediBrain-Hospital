@@ -1,0 +1,66 @@
+{
+  "pdfsInspected": 5,
+  "records": [
+    {
+      "id": "nhc-hyperlipidemia-diet-2023",
+      "title": "成人高脂血症食养指南（2023年版）",
+      "pages": 45,
+      "titleAndEditionVerified": true,
+      "documentType": "dietary-guideline",
+      "localFile": "data/external/references/nhc-hyperlipidemia-diet-2023/original.pdf",
+      "sha256": "595f0f3358c7b96580a548ee93923010b2a2ff672f500e3bf0859344811893d0",
+      "coverPreview": "data/knowledge-staging/pdf-previews/nhc-hyperlipidemia-diet-2023.png",
+      "clinicalContentReviewed": false,
+      "publishToQa": false
+    },
+    {
+      "id": "nhc-hypertension-diet-2023",
+      "title": "成人高血压食养指南（2023年版）",
+      "pages": 56,
+      "titleAndEditionVerified": true,
+      "documentType": "dietary-guideline",
+      "localFile": "data/external/references/nhc-hypertension-diet-2023/original.pdf",
+      "sha256": "e6c5227d95d289a810c953d895afc740ae922fc80ed4a8f1d5f4e39a9cd6c000",
+      "coverPreview": "data/knowledge-staging/pdf-previews/nhc-hypertension-diet-2023.png",
+      "clinicalContentReviewed": false,
+      "publishToQa": false
+    },
+    {
+      "id": "nhc-ckd-diet-2024",
+      "title": "成人慢性肾脏病食养指南（2024年版）",
+      "pages": 69,
+      "titleAndEditionVerified": true,
+      "documentType": "dietary-guideline",
+      "localFile": "data/external/references/nhc-ckd-diet-2024/original.pdf",
+      "sha256": "35df6e62cec5f3d30fbdfe8cf52c3e9465e58ae443ba3a44378e37048196aef9",
+      "coverPreview": "data/knowledge-staging/pdf-previews/nhc-ckd-diet-2024.png",
+      "clinicalContentReviewed": false,
+      "publishToQa": false
+    },
+    {
+      "id": "nhc-stroke-diet-2026",
+      "title": "成人脑卒中食养指南（2026年版）",
+      "pages": 109,
+      "titleAndEditionVerified": true,
+      "documentType": "dietary-guideline",
+      "localFile": "data/external/references/nhc-stroke-diet-2026/original.pdf",
+      "sha256": "aa4c3a714ea4b88cdf588329047db3e692083344f357077a9220f5ae603100a8",
+      "coverPreview": "data/knowledge-staging/pdf-previews/nhc-stroke-diet-2026.png",
+      "clinicalContentReviewed": false,
+      "publishToQa": false
+    },
+    {
+      "id": "nhc-gout-diet-qa-2024",
+      "title": "成人高尿酸血症与痛风食养指南（2024年版）问答",
+      "pages": 5,
+      "titleAndEditionVerified": true,
+      "documentType": "guideline-qa",
+      "localFile": "data/external/references/nhc-gout-diet-qa-2024/original.pdf",
+      "sha256": "64c46e671674e66a7db5003433e0f9a159c0c73b599343268fc07c0ded5abaa8",
+      "coverPreview": "data/knowledge-staging/pdf-previews/nhc-gout-diet-qa-2024.png",
+      "clinicalContentReviewed": false,
+      "publishToQa": false
+    }
+  ],
+  "clinicalAcceptance": "pending-professional-review"
+}

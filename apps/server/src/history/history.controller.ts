@@ -3,31 +3,27 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { HistoryService } from './history.service';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { PaginationDto } from '../common/dto/pagination.dto';
 
 @Controller('history')
 @UseGuards(AuthGuard('jwt'))
 export class HistoryController {
   constructor(private readonly historyService: HistoryService) {}
 
-  /** 我的问答历史（管理员默认也看自己的，用 all=true 看全部） */
+  /** 仅查询当前登录用户的问答历史。 */
   @Get()
-  list(
-    @CurrentUser('userId') userId: string,
-    @Query('all') all?: string,
-    @Query('page', new ParseIntPipe({ optional: true })) page = 1,
-    @Query('pageSize', new ParseIntPipe({ optional: true })) pageSize = 20,
-  ) {
-    if (all === 'true') {
-      return this.historyService.listAll(page, pageSize);
-    }
-    return this.historyService.listByUser(userId, page, pageSize);
+  list(@CurrentUser() user: { userId: string }, @Query() query: PaginationDto) {
+    return this.historyService.listByUser(
+      user.userId,
+      query.page,
+      query.pageSize,
+    );
   }
 
   /** 清空我的全部记录 */
@@ -38,10 +34,7 @@ export class HistoryController {
 
   /** 删除单条记录 */
   @Delete(':id')
-  remove(
-    @Param('id') id: string,
-    @CurrentUser() user: { userId: string; role: string },
-  ) {
-    return this.historyService.remove(id, user.userId, user.role === 'admin');
+  remove(@Param('id') id: string, @CurrentUser() user: { userId: string }) {
+    return this.historyService.remove(id, user.userId);
   }
 }

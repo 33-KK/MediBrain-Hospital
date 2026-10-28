@@ -1,7 +1,9 @@
-import { Column, Entity, ObjectIdColumn } from 'typeorm';
+import { Column, Entity, Index, ObjectIdColumn } from 'typeorm';
 import { ObjectId } from 'mongodb';
+import type { QaResponse } from '../../qa/qa-response';
 
 @Entity('qa_records')
+@Index(['userId', 'conversationId', 'createdAt', '_id'])
 export class QaRecord {
   @ObjectIdColumn()
   _id: ObjectId;
@@ -11,9 +13,6 @@ export class QaRecord {
 
   @Column()
   username: string;
-
-  @Column({ default: '' })
-  identity: string;
 
   @Column({ type: 'string' })
   question: string;
@@ -32,6 +31,18 @@ export class QaRecord {
 
   @Column({ type: 'simple-array', default: [] })
   entityNames: string[];
+
+  @Column()
+  conversationId?: string;
+
+  @Column()
+  resolvedQuestion?: string;
+
+  @Column()
+  documentId?: string;
+
+  @Column()
+  snapshot?: QaResponse;
 
   @Column({ type: 'timestamp', default: () => new Date() })
   createdAt: Date;

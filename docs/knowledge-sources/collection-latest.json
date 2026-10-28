@@ -1,0 +1,151 @@
+{
+  "sourceUrl": "https://medlineplus.gov/xml/mplus_topics_2026-10-10.xml",
+  "datasetDate": "2026-10-10",
+  "xmlGeneratedAt": "10/10/2026 02:30:38",
+  "downloadSha256": "ae1f946dc6a230c4b744293791e9164c6347cd8a453d677a1c1aff61bf88c536",
+  "totalPublishedTopics": 2033,
+  "languages": {
+    "English": 1017,
+    "Spanish": 1016
+  },
+  "excludedEnglishTopics": [
+    {
+      "id": "3181",
+      "title": "COVID-19 (Coronavirus Disease 2019)",
+      "reason": "missing-full-summary"
+    }
+  ],
+  "englishSummariesCollected": 1016,
+  "englishSummaryCharacters": 2118717,
+  "priorityCandidates": 20,
+  "missingPriorityTopics": [],
+  "candidates": [
+    {
+      "disease": "高血压",
+      "topic": "High Blood Pressure",
+      "sourceUrl": "https://medlineplus.gov/highbloodpressure.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "糖尿病",
+      "topic": "Diabetes",
+      "sourceUrl": "https://medlineplus.gov/diabetes.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "2型糖尿病",
+      "topic": "Diabetes Type 2",
+      "sourceUrl": "https://medlineplus.gov/diabetestype2.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "1型糖尿病",
+      "topic": "Diabetes Type 1",
+      "sourceUrl": "https://medlineplus.gov/diabetestype1.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "冠心病",
+      "topic": "Coronary Artery Disease",
+      "sourceUrl": "https://medlineplus.gov/coronaryarterydisease.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "脑卒中",
+      "topic": "Stroke",
+      "sourceUrl": "https://medlineplus.gov/stroke.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "慢性阻塞性肺疾病",
+      "topic": "COPD",
+      "sourceUrl": "https://medlineplus.gov/copd.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "哮喘",
+      "topic": "Asthma",
+      "sourceUrl": "https://medlineplus.gov/asthma.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "抑郁症",
+      "topic": "Depression",
+      "sourceUrl": "https://medlineplus.gov/depression.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "类风湿关节炎",
+      "topic": "Rheumatoid Arthritis",
+      "sourceUrl": "https://medlineplus.gov/rheumatoidarthritis.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "甲状腺功能亢进",
+      "topic": "Hyperthyroidism",
+      "sourceUrl": "https://medlineplus.gov/hyperthyroidism.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "胃溃疡",
+      "topic": "Peptic Ulcer",
+      "sourceUrl": "https://medlineplus.gov/pepticulcer.html",
+      "mappingScope": "broader-topic-not-equivalent"
+    },
+    {
+      "disease": "胃癌",
+      "topic": "Stomach Cancer",
+      "sourceUrl": "https://medlineplus.gov/stomachcancer.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "肺癌",
+      "topic": "Lung Cancer",
+      "sourceUrl": "https://medlineplus.gov/lungcancer.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "肺炎",
+      "topic": "Pneumonia",
+      "sourceUrl": "https://medlineplus.gov/pneumonia.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "慢性肾脏病",
+      "topic": "Chronic Kidney Disease",
+      "sourceUrl": "https://medlineplus.gov/chronickidneydisease.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "高脂血症",
+      "topic": "Cholesterol",
+      "sourceUrl": "https://medlineplus.gov/cholesterol.html",
+      "mappingScope": "related-topic-not-equivalent"
+    },
+    {
+      "disease": "痛风",
+      "topic": "Gout",
+      "sourceUrl": "https://medlineplus.gov/gout.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "肥胖",
+      "topic": "Obesity",
+      "sourceUrl": "https://medlineplus.gov/obesity.html",
+      "mappingScope": "related-topic"
+    },
+    {
+      "disease": "骨质疏松",
+      "topic": "Osteoporosis",
+      "sourceUrl": "https://medlineplus.gov/osteoporosis.html",
+      "mappingScope": "related-topic"
+    }
+  ],
+  "stagingFiles": [
+    "data/knowledge-staging/medlineplus-en.ndjson",
+    "data/knowledge-staging/priority-diseases.json"
+  ],
+  "databaseWrites": 0,
+  "qaPublishedRecords": 0,
+  "clinicalAcceptance": "pending-professional-review"
+}

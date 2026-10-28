@@ -2,7 +2,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { appConfig, databaseConfig, llmConfig, embeddingConfig, neo4jConfig, minioConfig } from './config/configuration';
+import {
+  appConfig,
+  databaseConfig,
+  llmConfig,
+  embeddingConfig,
+  neo4jConfig,
+  minioConfig,
+} from './config/configuration';
 import { DatabaseModule } from './database/database.module';
 import { RedisModule } from './database/redis.module';
 import { CommonModule } from './common/common.module';
@@ -16,12 +23,20 @@ import { HistoryModule } from './history/history.module';
 import { GraphModule } from './graph/graph.module';
 import { TtsModule } from './tts/tts.module';
 import { EmbeddingModule } from './embedding/embedding.module';
+import { KnowledgeModule } from './knowledge/knowledge.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, llmConfig, embeddingConfig, neo4jConfig, minioConfig],
+      load: [
+        appConfig,
+        databaseConfig,
+        llmConfig,
+        embeddingConfig,
+        neo4jConfig,
+        minioConfig,
+      ],
       envFilePath: ['.env', '../../.env'],
     }),
     DatabaseModule,
@@ -37,6 +52,7 @@ import { EmbeddingModule } from './embedding/embedding.module';
     GraphModule,
     TtsModule,
     EmbeddingModule,
+    KnowledgeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

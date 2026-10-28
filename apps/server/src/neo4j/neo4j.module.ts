@@ -15,11 +15,14 @@ import { NEO4J_DRIVER } from './neo4j.constants';
       useFactory: (config: ConfigService): Driver => {
         const uri = config.get<string>('neo4j.uri') ?? 'bolt://localhost:7687';
         const user = config.get<string>('neo4j.user') ?? 'neo4j';
-        const password = config.get<string>('neo4j.password') ?? 'medibrain-secret';
+        const password = config.get<string>('neo4j.password');
+        if (!password) throw new Error('必须配置真实 NEO4J_PASSWORD');
 
         return neo4j.driver(uri, neo4j.auth.basic(user, password), {
           maxConnectionPoolSize: 20,
           connectionTimeout: 10_000,
+          connectionAcquisitionTimeout: 10_000,
+          maxTransactionRetryTime: 0,
         });
       },
     },

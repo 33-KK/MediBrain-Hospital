@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: localhost:5000/medibrain-server:v1.2.0
+          image: medibrain-server:conversations-20261014
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
@@ -50,13 +50,13 @@ spec:
               value: '3000'
           livenessProbe:
             httpGet:
-              path: /api/health
+              path: /api/health/live
               port: 3000
             initialDelaySeconds: 30
             periodSeconds: 15
           readinessProbe:
             httpGet:
-              path: /api/health
+              path: /api/health/ready
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 10

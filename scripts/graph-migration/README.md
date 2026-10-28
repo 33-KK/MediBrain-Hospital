@@ -13,8 +13,8 @@
 
 ```bash
 cd scripts/graph-migration
-# 安装驱动（或复用 server 的 node_modules）
-set NODE_PATH=D:\MediBrain-Hospital\apps\server\node_modules
+# 先在 apps/server 执行 npm ci；脚本自动复用它的依赖并读取项目 .env。
+# 源库密码使用 SRC_PASS 或 NEO4J_PASSWORD；目标库必须另外设置 DST_PASS。
 
 # 1. 导出（源库默认 bolt://localhost:7687）
 node export.js                    # 默认输出 graph-dump.cypher
@@ -28,9 +28,9 @@ node import4.js graph-dump.cypher
 | 变量 | 默认 | 说明 |
 |------|------|------|
 | SRC_URI | bolt://localhost:7687 | 源库地址 |
-| SRC_USER / SRC_PASS | neo4j / qm5E!tkB7batqBX | 源库凭据 |
+| SRC_USER / SRC_PASS | neo4j / 无默认密码 | 源库凭据；SRC_PASS 可回退到 NEO4J_PASSWORD |
 | DST_URI | bolt://localhost:7688 | 目标库地址（本地 7688 → 集群 7687 的 port-forward） |
-| DST_USER / DST_PASS | neo4j / medibrain-secret | 目标库凭据 |
+| DST_USER / DST_PASS | neo4j / 无默认密码 | 目标库凭据；DST_PASS 可回退到 PASS |
 
 ## 批量导入注意点
 
@@ -47,6 +47,8 @@ node import4.js graph-dump.cypher
 ## 校验
 
 导入完成后建议比对数量：
+
+`node verify.js` 使用同一组源库与目标库环境变量核对节点、关系和空标签数量。
 
 ```cypher
 MATCH (n) RETURN count(n)          -- 源库 49278，目标应一致

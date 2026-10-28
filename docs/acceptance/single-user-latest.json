@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-14T09:03:24.310Z",
+  "baseUrl": "http://localhost:8090/api",
+  "checks": [
+    "registration-and-token-have-no-classification",
+    "legacy-account-password-compatible-and-metadata-ignored",
+    "management-endpoints-removed-for-all-accounts",
+    "history-list-delete-and-clear-are-owner-only",
+    "knowledge-and-read-only-disease-graph-available"
+  ],
+  "status": "passed",
+  "fixtureCleanup": "passed"
+}

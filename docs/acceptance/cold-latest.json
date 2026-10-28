@@ -1,0 +1,23 @@
+{
+  "runId": "588a0b46c4f9",
+  "timestamp": "2026-10-08T02:44:10.324Z",
+  "base": "http://localhost:8090/api",
+  "status": "passed",
+  "criteria": {
+    "errors": 0,
+    "burstP95Ms": 8000,
+    "steadyP95Ms": 5000,
+    "cachedTtsMs": 500,
+    "coldQaMs": 8000
+  },
+  "phases": {
+    "cold": {
+      "model": "qwen2.5:7b",
+      "ms": 5172,
+      "provider": "ollama",
+      "modelAccepted": true,
+      "facts": 4
+    }
+  },
+  "cleanup": true
+}

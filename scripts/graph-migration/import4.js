@@ -1,10 +1,11 @@
+const { requireDependency, requiredEnv } = require('../runtime.cjs');
 const fs = require('fs');
 const readline = require('readline');
-const neo4j = require('neo4j-driver');
+const neo4j = requireDependency('neo4j-driver');
 
 const TARGET = process.env.TARGET || 'bolt://localhost:7688';
 const USER = process.env.USER || 'neo4j';
-const PASS = process.env.PASS || 'medibrain-secret';
+const PASS = requiredEnv("DST_PASS", "PASS");
 const FILE = process.argv[2] || 'graph-dump.cypher';
 const BATCH = Number(process.env.BATCH || 50);
 

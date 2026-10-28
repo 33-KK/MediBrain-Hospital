@@ -1,0 +1,145 @@
+{
+  "timestamp": "2026-10-08T02:30:30.527Z",
+  "mode": "apply",
+  "repo": "https://github.com/honeyandme/RAGQnASystem",
+  "commit": "6d91e2ec76f70dd604b8a897a63b2ac6fba3ec95",
+  "sources": [
+    {
+      "repo": "https://github.com/honeyandme/RAGQnASystem",
+      "commit": "6d91e2ec76f70dd604b8a897a63b2ac6fba3ec95",
+      "path": "data/medical_new_2.json",
+      "blobSha": "c2c4b595eb297d663729fd33ec687b53b2356550",
+      "sha256": "099ba82332b998d9cbfd8ba013149605aa08061bc955a13a2b772feefa8cbd3c",
+      "records": 8808
+    },
+    {
+      "repo": "https://github.com/honeyandme/RAGQnASystem",
+      "commit": "6d91e2ec76f70dd604b8a897a63b2ac6fba3ec95",
+      "path": "data/medical.json",
+      "blobSha": "cf2f029f48719d621db377ca126e3542bb89d89a",
+      "sha256": "268f8e824df0ca49e6dcd98c95babf1db04fef0b89b9483854bb637586d1e49d",
+      "records": 8808
+    }
+  ],
+  "scope": "Exact equality of seven disease properties; relationships and clinical correctness are not certified",
+  "total": 8831,
+  "matched": 8804,
+  "unmatched": 27,
+  "byFile": {
+    "data/medical_new_2.json": 8804,
+    "data/medical.json": 0
+  },
+  "applied": 8804,
+  "backupFile": "data/backups/import-provenance-2026-10-08T02-30-30-527Z.json",
+  "unmatchedNodes": [
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:488",
+      "name": "胃癌"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:996",
+      "name": "类风湿关节炎"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:3409",
+      "name": "抑郁症"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:7266",
+      "name": "慢性阻塞性肺疾病"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49277",
+      "name": "慢阻肺"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49278",
+      "name": "COPD"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49302",
+      "name": "肺源性心脏病"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49303",
+      "name": "抑郁焦虑"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49310",
+      "name": "抑郁障碍"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49311",
+      "name": "忧郁症"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49337",
+      "name": "自杀行为"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49338",
+      "name": "睡眠障碍加重"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49339",
+      "name": "躯体疾病风险增加"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49340",
+      "name": "社会功能减退"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49346",
+      "name": "甲状腺功能亢进"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49365",
+      "name": "甲状腺危象"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49366",
+      "name": "突眼"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49371",
+      "name": "类风湿性关节炎"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49395",
+      "name": "肺间质纤维化"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49396",
+      "name": "继发性干燥综合征"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49400",
+      "name": "脑卒中"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49401",
+      "name": "脑血管意外"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49402",
+      "name": "卒中"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49431",
+      "name": "肺部感染"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49432",
+      "name": "下肢深静脉血栓"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49433",
+      "name": "压疮"
+    },
+    {
+      "id": "4:d8a79d89-315f-4c76-9b7b-f9d7be936088:49434",
+      "name": "吞咽障碍"
+    }
+  ],
+  "clinicalAcceptance": "pending-professional-review"
+}

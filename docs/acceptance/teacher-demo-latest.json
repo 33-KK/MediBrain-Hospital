@@ -1,0 +1,39 @@
+{
+  "checkedAt": "2026-10-11T12:20:53.975Z",
+  "status": "awaiting-cpolar-authentication",
+  "localChecks": "passed",
+  "teacherRole": "user",
+  "publicLinkVerified": false,
+  "checks": [
+    {
+      "endpoint": "/auth/profile",
+      "status": 200
+    },
+    {
+      "endpoint": "/knowledge/stats",
+      "status": 200
+    },
+    {
+      "endpoint": "/users",
+      "status": 403
+    },
+    {
+      "endpoint": "/history?all=true",
+      "status": 403
+    },
+    {
+      "endpoint": "/graph/meta",
+      "status": 403
+    },
+    {
+      "endpoint": "/qa/disease?name=%E9%AB%98%E8%A1%80%E5%8E%8B",
+      "status": 200
+    }
+  ],
+  "anonymousKnowledgeStatus": 401,
+  "failedProviders": [
+    "Cloudflare Quick Tunnel: DNS/edge connectivity failed",
+    "localhost.run: SSH connection timed out"
+  ],
+  "nextStep": "Configure a personal free cpolar account token locally; then verify HTTPS login, knowledge search and QA."
+}

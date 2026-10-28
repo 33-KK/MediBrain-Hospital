@@ -47,13 +47,13 @@ spec:
                   key: NEO4J_PASSWORD
           readinessProbe:
             httpGet:
-              path: /api/health
+              path: /api/health/ready
               port: 3000
             initialDelaySeconds: 15
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: /api/health
+              path: /api/health/live
               port: 3000
             initialDelaySeconds: 30
             periodSeconds: 20
